@@ -14,13 +14,12 @@ const cx = classNames.bind(styles)
 
 export default class App extends React.Component {
     state = {
-        date: new Date(+(new Date()) - Math.floor(Math.random()*10000000000)),
+        date: new Date(-10800000),
         dataStart: null,
         nameTask: "",
         TabContainerOpen: 0,
         modalOpen: false,
         buttonState: true,
-        value: 0,
         rows: [{
             id: 1,
             name: 1,
@@ -96,27 +95,42 @@ export default class App extends React.Component {
                 onClick={() => this.deleteTask(4)}
             > DELETE
             </Button>,
-        },
-
-
-
-
-        ]
+        },]
     };
 
-    tick() {
+    tick = () => {
         this.setState({
-            date:  new Date(this.state.date.getTime() + 1000)
+            date:  new Date(this.state.date.getTime() + 1000),
         });
+        localStorage.setItem( "date", new Date( new Date() - this.state.dataStart -10800000));
+        console.log(new Date( new Date() - this.state.dataStart -10800000).toLocaleTimeString())
+    }
+    componentWillMount() {
+        const {  dataStart, nameTask, TabContainerOpen, modalOpen, buttonState, rows, } = this.state;
+        const dataStartKey = localStorage.getItem( "dataStart");
+        const nameTaskKey = localStorage.getItem( "nameTask");
+        const TabContainerOpenKey = localStorage.getItem( "TabContainerOpen");
+        const modalOpenKey = localStorage.getItem( "modalOpen");
+        const buttonStateKey = localStorage.getItem( "buttonState");
+        const rowsKey = localStorage.getItem( "rows");
+
+
     }
 
+
     startTime = () =>{
-        const { nameTask, buttonState, rows, date, dataStart } = this.state;
+        const {  dataStart, nameTask, TabContainerOpen, modalOpen, buttonState, rows, } = this.state;
         if(buttonState) {
             this.setState({
                 buttonState: !buttonState,
-                dataStart: date,
+                dataStart: new Date(),
             });
+            localStorage.setItem( "dataStart", new Date());
+            localStorage.setItem( "nameTask", nameTask);
+            localStorage.setItem( "TabContainerOpen", TabContainerOpen);
+            localStorage.setItem( "modalOpen", modalOpen);
+            localStorage.setItem( "buttonState", !buttonState);
+            localStorage.setItem( "rows", rows);
             this.timerID = setInterval(
                 () => this.tick(),
                 1000
@@ -124,7 +138,7 @@ export default class App extends React.Component {
 
         }
         if(!nameTask && !buttonState){
-            this.setState({ modalState: true});
+            this.closeModal()
         }
         if(nameTask && !buttonState) {
             clearTimeout(this.timerID)
@@ -134,8 +148,8 @@ export default class App extends React.Component {
                     name: rows[rows.length - 1].id + 1,
                     task: nameTask,
                     timeStart: dataStart.toLocaleTimeString(),
-                    timeEnd: date.toLocaleTimeString(),
-                    timeSpend: new Date(date - dataStart).toLocaleTimeString(),
+                    timeEnd: new Date().toLocaleTimeString(),
+                    timeSpend: this.state.date.toLocaleTimeString(),
                     info: <Button
                     variant="contained"
                      className={cx('buttonStop')}
@@ -147,10 +161,33 @@ export default class App extends React.Component {
                 onClick={() => this.deleteTask(rows[rows.length - 1].id + 1)}
             > DELETE
             </Button>}],
-                date: new Date(+(new Date()) - Math.floor(Math.random()*10000000000)),
+                date: new Date(-10800000),
                 buttonState: !buttonState,
                 nameTask: "",
             });
+
+            localStorage.setItem( "date", new Date(-10800000));
+            localStorage.setItem( "buttonState", !buttonState);
+            localStorage.setItem( "nameTask", "");
+            localStorage.setItem( "rows", [...rows,{
+                id: rows[rows.length - 1].id + 1,
+                name: rows[rows.length - 1].id + 1,
+                task: nameTask,
+                timeStart: dataStart.toLocaleTimeString(),
+                timeEnd: new Date().toLocaleTimeString(),
+                timeSpend: this.state.date.toLocaleTimeString(),
+                info: <Button
+                    variant="contained"
+                    className={cx('buttonStop')}
+                > INFO
+                </Button>,
+                delete: <Button
+                    variant="contained"
+                    className={cx('buttonStop')}
+                    onClick={() => this.deleteTask(rows[rows.length - 1].id + 1)}
+                > DELETE
+                </Button>}]);
+
         }
     }
     deleteTask = (id) => {
@@ -159,17 +196,22 @@ export default class App extends React.Component {
         this.setState({
             rows: newRows
         })
+        localStorage.setItem( "rows", newRows);
     }
     closeModal = () => {
-        this.setState({ modalState: false});
+        this.setState({ modalOpen: !this.state.modalOpen});
+        localStorage.setItem( "modalOpen", !this.state.modalOpen);
     }
     handleChange = (event, value) => {
         this.setState({ TabContainerOpen: value });
+        localStorage.setItem( "TabContainerOpen", value);
     };
     changeName = ({target}) =>{
         this.setState({ nameTask: target.value});
+        localStorage.setItem( "nameTask", target.value);
     }
     render() {
+
         const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen } = this.state;
         return (
             <div className={cx('container')}>
