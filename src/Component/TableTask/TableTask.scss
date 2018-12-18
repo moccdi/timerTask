@@ -1,0 +1,33 @@
+
+%colorBlue{
+  color: #344dc4
+}
+
+.paperClass{
+  width: 100%;
+  .tableHead{
+    height: 66px;
+  }
+  .tableBody{
+    height: 75px;
+    background: #eaf6ff;
+    .tableCell{
+    @extend %colorBlue
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

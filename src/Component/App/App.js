@@ -1,12 +1,11 @@
 import React from 'react'
 import './reset.css'
-import {
-    TextField, Button, AppBar, Tabs, Tab, Table, TableBody, TableCell, TableHead, TableRow, Paper
-} from '@material-ui/core';
+import { TextField, Button, AppBar, Tabs, Tab,} from '@material-ui/core';
 
 
 import classNames from 'classnames';
 import styles from './App.scss'
+import TableTask from "../TableTask/TableTask";
 
 const cx = classNames.bind(styles)
 
@@ -85,25 +84,16 @@ export default class App extends React.Component {
                 1000
             );
         }
-        if(localStorageState === "run2"){
-
-            //console.log(JSON.parse(localState).rows,this.state.rows)
+        if(localStorageState === "finish"){
             this.setState(State => ({
                 rows: JSON.parse(localState).rows,
+                TabContainerOpen: JSON.parse(localState).TabContainerOpen,
             }))
         }
 
-
-            // date: new Date(-10800000),
-            //     dataStart: null,
-            //     nameTask: "",
-            //     TabContainerOpen: 0,
-            //     modalOpen: false,
-            //     buttonState: true,
-
     }
     startTime = () =>{
-        const {  dataStart, nameTask, TabContainerOpen, modalOpen, buttonState, rows, } = this.state;
+        const {  dataStart, nameTask, buttonState, rows, } = this.state;
         if(buttonState) {
             this.setState({
                 buttonState: !buttonState,
@@ -112,8 +102,8 @@ export default class App extends React.Component {
             localStorage.setItem("state", JSON.stringify(
                 { ...this.state,
                             buttonState: !buttonState,
-                            dataStart: new Date()}
-                            ));
+                            dataStart: new Date(),
+                      }));
             localStorage.setItem("localStorageState", "run");
             this.timerID = setInterval(
                 () => this.tick(),
@@ -134,9 +124,10 @@ export default class App extends React.Component {
                     task: nameTask,
                     timeStart: dataStart.toLocaleTimeString(),
                     timeEnd: new Date().toLocaleTimeString(),
-                    timeSpend: this.state.date.toLocaleTimeString(),}],
+                    timeSpend: this.state.date.toLocaleTimeString(),
+                    }],
             });
-            localStorage.setItem("localStorageState", "run2");
+            localStorage.setItem("localStorageState", "finish");
             localStorage.setItem("state", JSON.stringify(
                 { ...this.state,
                     date: new Date(-10800000),
@@ -154,9 +145,7 @@ export default class App extends React.Component {
     deleteTask = (id) => {
         const { rows, } = this.state;
         const newRows = rows.filter(arrIndex => arrIndex.id !== id)
-        this.setState({
-            rows: newRows
-        })
+        this.setState({rows: newRows})
         localStorage.setItem("state", JSON.stringify( { ...this.state, rows: newRows}));
     }
     closeModal = () => {
@@ -217,52 +206,11 @@ export default class App extends React.Component {
                             <Tab label="TASKS CHART" />
                     </Tabs>
                 </AppBar>
-
-                {TabContainerOpen === 0 && <Paper className={cx('paperClass')}>
-                    <Table>
-                        <TableHead>
-                            <TableRow className={cx('tableHead')}>
-                                <TableCell>№</TableCell>
-                                <TableCell numeric>Task</TableCell>
-                                <TableCell numeric>Time start</TableCell>
-                                <TableCell numeric>Time end</TableCell>
-                                <TableCell numeric>Time spend</TableCell>
-                                <TableCell numeric>Info</TableCell>
-                                <TableCell numeric>Delete</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows.map(row => {
-                                return (
-                                    <TableRow key={row.id} className={cx('tableBody')}>
-                                        <TableCell component="th" scope="row"
-                                                   className={cx('tableCell')}>{row.id}</TableCell>
-                                        <TableCell numeric className={cx('tableCell')}>{row.task}</TableCell>
-                                        <TableCell numeric className={cx('tableCell')}>{row.timeStart}</TableCell>
-                                        <TableCell numeric className={cx('tableCell')}>{row.timeEnd}</TableCell>
-                                        <TableCell numeric className={cx('tableCell')}>{row.timeSpend}</TableCell>
-                                        <TableCell numeric className={cx('tableCell')}>
-                                            <Button
-                                                variant="contained"
-                                                className={cx('buttonStop')}
-                                            > INFO
-                                            </Button>
-                                        </TableCell>
-                                        <TableCell numeric className={cx('tableCell')}>
-                                            <Button
-                                                variant="contained"
-                                                className={cx('buttonStop')}
-                                                onClick={() => this.deleteTask(row.id)}
-                                            >   DELETE
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </Paper>}
+                {TabContainerOpen === 0 &&  <TableTask rows={rows}/>}
             </div>
+
         )
     }
 }
+
+
