@@ -7,12 +7,15 @@ import TableTask from "../TableTask/TableTask";
 import { TextField, Button, AppBar, Tabs, Tab,} from '@material-ui/core';
 import {BrowserRouter as Router, NavLink, Route, Switch,Redirect} from 'react-router-dom';
 
-import createBrowserHistory from "history/createBrowserHistory"
+// import createBrowserHistory from "history/createBrowserHistory"
+// const history = createBrowserHistory();
+
 import NodFound from "../NodFound/NodFound";
 import TaskChart from "../TaskChart/TaskChart";
 import Link from "react-router-dom/es/Link";
+import TaskPage from "../TaskPage/TaskPage";
 
-const history = createBrowserHistory();
+
 
 
 
@@ -27,6 +30,7 @@ export default class App extends Component {
         TabContainerOpen: 0,
         modalOpen: false,
         buttonState: true,
+        taskPage: null,
         rows: [{
             id: 1,
             task: "lorem ipsum d...",
@@ -68,11 +72,8 @@ export default class App extends Component {
     componentWillMount() {
         let localStorageState = localStorage.getItem("localStorageState");
         let localState = localStorage.getItem("state");
-        // console.log(localStorageState, JSON.parse(localState) )
-        //console.log( JSON.parse(localState).date,new Date(JSON.parse(localState).date) )
-        //console.log(new Date( new Date() - new Date(JSON.parse(localState).dataStart) -10800000).toLocaleTimeString())
+        this.setState(State => ({ taskPage: JSON.parse(localState).taskPage,}))
         if(localStorageState === "run") {
-            //console.log(JSON.parse(localState).rows,this.state.rows)
             this.setState(State => ({
                 date: new Date(new Date() - new Date(JSON.parse(localState).dataStart) - 10800000),
                 dataStart: new Date(JSON.parse(localState).dataStart),
@@ -81,7 +82,7 @@ export default class App extends Component {
                 modalOpen: JSON.parse(localState).modalOpen,
                 buttonState: JSON.parse(localState).buttonState,
                 rows: JSON.parse(localState).rows,
-
+                taskPage: JSON.parse(localState).taskPage,
             }))
             this.timerID = setInterval(
                 () => this.tick(),
@@ -119,17 +120,18 @@ export default class App extends Component {
         }
         if(nameTask && !buttonState) {
             clearTimeout(this.timerID)
+            const newRows =  [...rows,{
+                id: rows[rows.length - 1].id + 1,
+                task: nameTask,
+                timeStart: dataStart.toLocaleTimeString(),
+                timeEnd: new Date().toLocaleTimeString(),
+                timeSpend: this.state.date.toLocaleTimeString(),
+            }]
             this.setState({
                 date: new Date(-10800000),
                 buttonState: !buttonState,
                 nameTask: "",
-                rows: [...rows,{
-                    id: rows[rows.length - 1].id + 1,
-                    task: nameTask,
-                    timeStart: dataStart.toLocaleTimeString(),
-                    timeEnd: new Date().toLocaleTimeString(),
-                    timeSpend: this.state.date.toLocaleTimeString(),
-                    }],
+                rows: newRows,
             });
             localStorage.setItem("localStorageState", "finish");
             localStorage.setItem("state", JSON.stringify(
@@ -137,12 +139,7 @@ export default class App extends Component {
                     date: new Date(-10800000),
                     buttonState: !buttonState,
                     nameTask: "",
-                    rows: [...rows,{
-                        id: rows[rows.length - 1].id + 1,
-                        task: nameTask,
-                        timeStart: dataStart.toLocaleTimeString(),
-                        timeEnd: new Date().toLocaleTimeString(),
-                        timeSpend: this.state.date.toLocaleTimeString(),}]
+                    rows: newRows
                 }));
         }
     }
@@ -156,94 +153,94 @@ export default class App extends Component {
         this.setState({ modalOpen: !this.state.modalOpen});
         localStorage.setItem("state", JSON.stringify( { ...this.state, modalOpen: !this.state.modalOpen}));
     }
-    handleChange = (event, value) => {
-
-
-
-        //generatePath("/TaskChart");
-        // const location = {
-        //     pathname: '/TaskChart',
-        //     state: { fromDashboard: true }
-        // }
-        // history.push(location);
-        // history.replace(location
-
-        // history.push('/TaskChart');
-
-
-        // this.setState({ TabContainerOpen: value });
-        // this.context.router.push(`/genre/${value}`)
-        // localStorage.setItem("state", JSON.stringify( { ...this.state, TabContainerOpen: value}));
+    handleChange = (props, event, value) => {
+        if(value === 0){
+            props.history.push('/');
+        }
+        if(value === 1){
+            props.history.push('/TaskChart');
+        }
+        this.setState({ TabContainerOpen: value });
+        localStorage.setItem("state", JSON.stringify( { ...this.state, TabContainerOpen: value}));
     }
     changeName = ({target}) => {
         this.setState({ nameTask: target.value});
         localStorage.setItem("state", JSON.stringify( { ...this.state, nameTask: target.value}));
     }
+    changeTaskPage = (idTask, history) => {
+        this.setState({ taskPage: idTask})
+        localStorage.setItem("state", JSON.stringify( { ...this.state, taskPage: idTask}));
+        history.push(`/TaskPage/${idTask}`);
+
+    }
     render() {
-        const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen } = this.state;
-        console.log(this.props)
+        const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage } = this.state;
         return (
-            <div className={cx('container')}>
-                {modalOpen && <div className={cx('modalWindow')}>
-                    <div className={cx('modalBlock')}>
-                        <h2>Empty task name</h2>
-                        <span>You are tryning close your task without name, enter the title and try again!</span>
-                        <button
-                            onClick={this.closeModal}
+            <div>
+            <Switch>
+                <Route path={`/TaskPage/${taskPage}`} render={(props) => (
+                    <TaskPage {...props} rows={rows[taskPage -1]} />)}/>
+                <Route exact path="/" render={(props) => (
+                    <div className={cx('container')}>
+                        {modalOpen && <div className={cx('modalWindow')}>
+                            <div className={cx('modalBlock')}>
+                                <h2>Empty task name</h2>
+                                <span>You are tryning close your task without name, enter the title and try again!</span>
+                                <button
+                                    onClick={this.closeModal}
+                                >
+                                    CLOSE
+                                </button>
+                            </div>
+                        </div>}
+                        <TextField
+                            id="standard-dense"
+                            label="Name of your task"
+                            className={cx('standard-dense')}
+                            value={nameTask}
+                            onChange={this.changeName}
+                        />
+                        <div className={cx('timerCircle')}>
+                            <span>{date.toLocaleTimeString()}</span>
+                        </div>
+                        <Button
+                            variant="contained"
+                            className={cx('buttonStop')}
+                            onClick={this.startTime}
                         >
-                            CLOSE
-                        </button>
+                            {buttonState ? "START" : "STOP"}
+                        </Button>
+                        <AppBar position="static" className={cx('AppBar')}>
+                            <Tabs
+                                fullWidth
+                                value={TabContainerOpen}
+                                onChange={(event, value) => this.handleChange(props, event, value)}
+
+                                className={cx('tabsClass')}
+                                indicator={cx('indicatorClass')}
+                                TabIndicatorProps={cx('indicatorClass')}
+                            >
+                                <Tab label="TASKS LOG">
+
+                                </Tab>
+                                <Tab label="TASKS CHART">
+
+                                </Tab>
+                            </Tabs>
+                        </AppBar>
+                        <Switch>
+                            <Route exact path="/" render={(props) => {
+                                return <TableTask {...props} rows={rows}  deleteTask={this.deleteTask} changeTaskPage={this.changeTaskPage}/>
+                            }}/>
+                            <Route path="/TaskChart" component={TaskChart}/>
+                        </Switch>
                     </div>
-                </div>}
-                <TextField
-                    id="standard-dense"
-                    label="Name of your task"
-                    className={cx('standard-dense')}
-                    value={nameTask}
-                    onChange={this.changeName}
-                />
-                <div className={cx('timerCircle')}>
-                    <span>{date.toLocaleTimeString()}</span>
-                </div>
-                <Button
-                    variant="contained"
-                    className={cx('buttonStop')}
-                    onClick={this.startTime}
-                >
-                    {buttonState ? "START" : "STOP"}
-                </Button>
-
-                <AppBar position="static" className={cx('AppBar')}>
-                    <Tabs
-                        fullWidth
-                        value={TabContainerOpen}
-                        onChange={this.handleChange}
-
-                        className={cx('tabsClass')}
-                        indicator={cx('indicatorClass')}
-                        TabIndicatorProps={cx('indicatorClass')}
-                    >
-                        <Tab label="TASKS LOG">
-
-                        </Tab>
-                        <Tab label="TASKS CHART">
-
-                        </Tab>
-                    </Tabs>
-                </AppBar>
-
-                <Switch>
-                    <Route exact path="/" render={(props) => {
-                        return <TableTask {...props} rows={rows} />
-                    }}/>
-                    <Route path="/TaskChart" component={TaskChart}/>
-                    <Route component={NodFound}/>
-                    {/*<Redirect to={"/TaskChart"} component={TaskChart}/>*/}
-                    {/*<Redirect to="/"/>*/}
-                </Switch>
-            </div>
+                )}/>
+                <Route component={NodFound}/>
+            </Switch>
+              </div>
         )
     }
 }
-
+//localStorage.clear()
 

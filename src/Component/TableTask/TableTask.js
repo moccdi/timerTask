@@ -7,8 +7,11 @@ import {Button, Paper, Table, TableBody, TableCell, TableHead, TableRow} from "@
 const cx = classNames.bind(styles)
 
 
-const TableTask = ({ rows }) => (
-    <Paper className={cx('paperClass')}>
+const TableTask = ({ rows, deleteTask, history, match, changeTaskPage }) => {
+    function taskDomain() {
+        history.push(`${match.url}/sell2`);
+    }
+    return <Paper className={cx('paperClass')}>
         <Table>
             <TableHead>
                 <TableRow className={cx('tableHead')}>
@@ -35,6 +38,7 @@ const TableTask = ({ rows }) => (
                                 <Button
                                     variant="contained"
                                     className={cx('buttonStop')}
+                                    onClick={() => changeTaskPage(row.id, history)}
                                 > INFO
                                 </Button>
                             </TableCell>
@@ -42,8 +46,8 @@ const TableTask = ({ rows }) => (
                                 <Button
                                     variant="contained"
                                     className={cx('buttonStop')}
-                                    onClick={() => this.deleteTask(row.id)}
-                                >   DELETE
+                                    onClick={() => deleteTask(row.id)}
+                                > DELETE
                                 </Button>
                             </TableCell>
                         </TableRow>
@@ -52,7 +56,7 @@ const TableTask = ({ rows }) => (
             </TableBody>
         </Table>
     </Paper>
-)
+}
 
 
 export default TableTask
