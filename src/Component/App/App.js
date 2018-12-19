@@ -181,7 +181,7 @@ export default class App extends Component {
     }
     render() {
         const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen } = this.state;
-       // console.log(history)
+        console.log(this.props)
         return (
             <div className={cx('container')}>
                 {modalOpen && <div className={cx('modalWindow')}>
