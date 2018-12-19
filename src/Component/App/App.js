@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { Component } from 'react';
 import './reset.css'
 import classNames from 'classnames';
 import styles from './App.scss'
 import TableTask from "../TableTask/TableTask";
+
 import { TextField, Button, AppBar, Tabs, Tab,} from '@material-ui/core';
 import {BrowserRouter as Router, NavLink, Route, Switch,Redirect} from 'react-router-dom';
 
@@ -18,7 +19,7 @@ const history = createBrowserHistory();
 const cx = classNames.bind(styles)
 
 
-export default class App extends React.Component {
+export default class App extends Component {
     state = {
         date: new Date(-10800000),
         dataStart: null,
@@ -60,10 +61,6 @@ export default class App extends React.Component {
         this.setState({
             date:  new Date(this.state.date.getTime() + 1000),
         });
-
-        // this.setState({
-        //     date:  new Date(this.state.date.getTime() + 1000),
-        // });
 
         // localStorage.setItem( "date", new Date( new Date() - this.state.dataStart -10800000));
         // console.log(new Date( new Date() - this.state.dataStart -10800000).toLocaleTimeString())
@@ -160,7 +157,20 @@ export default class App extends React.Component {
         localStorage.setItem("state", JSON.stringify( { ...this.state, modalOpen: !this.state.modalOpen}));
     }
     handleChange = (event, value) => {
-        history.push('/TaskChart');
+
+
+
+        //generatePath("/TaskChart");
+        // const location = {
+        //     pathname: '/TaskChart',
+        //     state: { fromDashboard: true }
+        // }
+        // history.push(location);
+        // history.replace(location
+
+        // history.push('/TaskChart');
+
+
         // this.setState({ TabContainerOpen: value });
         // this.context.router.push(`/genre/${value}`)
         // localStorage.setItem("state", JSON.stringify( { ...this.state, TabContainerOpen: value}));
@@ -171,68 +181,67 @@ export default class App extends React.Component {
     }
     render() {
         const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen } = this.state;
-        console.log(history)
+       // console.log(history)
         return (
-            <Router>
-                <div className={cx('container')}>
-                    {modalOpen && <div className={cx('modalWindow')}>
-                        <div className={cx('modalBlock')}>
-                            <h2>Empty task name</h2>
-                            <span>You are tryning close your task without name, enter the title and try again!</span>
-                            <button
-                                onClick={this.closeModal}
-                            >
-                                CLOSE
-                            </button>
-                        </div>
-                    </div>}
-                    <TextField
-                        id="standard-dense"
-                        label="Name of your task"
-                        className={cx('standard-dense')}
-                        value={nameTask}
-                        onChange={this.changeName}
-                    />
-                    <div className={cx('timerCircle')}>
-                        <span>{date.toLocaleTimeString()}</span>
-                    </div>
-                    <Button
-                        variant="contained"
-                        className={cx('buttonStop')}
-                        onClick={this.startTime}
-                    >
-                        {buttonState ? "START" : "STOP"}
-                    </Button>
-
-                    <AppBar position="static" className={cx('AppBar')}>
-                        <Tabs
-                            fullWidth
-                            value={TabContainerOpen}
-                            onChange={this.handleChange}
-
-                            className={cx('tabsClass')}
-                            indicator={cx('indicatorClass')}
-                            TabIndicatorProps={cx('indicatorClass')}
+            <div className={cx('container')}>
+                {modalOpen && <div className={cx('modalWindow')}>
+                    <div className={cx('modalBlock')}>
+                        <h2>Empty task name</h2>
+                        <span>You are tryning close your task without name, enter the title and try again!</span>
+                        <button
+                            onClick={this.closeModal}
                         >
-                            <Tab label="TASKS LOG">
-
-                            </Tab>
-                            <Tab label="TASKS CHART">
-
-                            </Tab>
-                        </Tabs>
-                    </AppBar>
-                    <Switch>
-                        <Route exact path="/" render={(props) => {
-                            const rowss = rows
-                            return <TableTask rows={rowss} />
-                        }}/>
-                        <Route path="/TaskChart" component={TaskChart}/>
-                        <Route component={NodFound}/>
-                        {/*<Redirect to="/"/>*/}
-                    </Switch>
+                            CLOSE
+                        </button>
+                    </div>
+                </div>}
+                <TextField
+                    id="standard-dense"
+                    label="Name of your task"
+                    className={cx('standard-dense')}
+                    value={nameTask}
+                    onChange={this.changeName}
+                />
+                <div className={cx('timerCircle')}>
+                    <span>{date.toLocaleTimeString()}</span>
                 </div>
-            </Router>
+                <Button
+                    variant="contained"
+                    className={cx('buttonStop')}
+                    onClick={this.startTime}
+                >
+                    {buttonState ? "START" : "STOP"}
+                </Button>
+
+                <AppBar position="static" className={cx('AppBar')}>
+                    <Tabs
+                        fullWidth
+                        value={TabContainerOpen}
+                        onChange={this.handleChange}
+
+                        className={cx('tabsClass')}
+                        indicator={cx('indicatorClass')}
+                        TabIndicatorProps={cx('indicatorClass')}
+                    >
+                        <Tab label="TASKS LOG">
+
+                        </Tab>
+                        <Tab label="TASKS CHART">
+
+                        </Tab>
+                    </Tabs>
+                </AppBar>
+
+                <Switch>
+                    <Route exact path="/" render={(props) => {
+                        return <TableTask {...props} rows={rows} />
+                    }}/>
+                    <Route path="/TaskChart" component={TaskChart}/>
+                    <Route component={NodFound}/>
+                    {/*<Redirect to={"/TaskChart"} component={TaskChart}/>*/}
+                    {/*<Redirect to="/"/>*/}
+                </Switch>
+            </div>
         )
     }
 }
