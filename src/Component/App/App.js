@@ -1,14 +1,21 @@
 import React from 'react'
 import './reset.css'
-import { TextField, Button, AppBar, Tabs, Tab,} from '@material-ui/core';
-
-
 import classNames from 'classnames';
 import styles from './App.scss'
 import TableTask from "../TableTask/TableTask";
+import { TextField, Button, AppBar, Tabs, Tab,} from '@material-ui/core';
+import {BrowserRouter as Router, NavLink, Route, Switch,Redirect} from 'react-router-dom';
+
+import createBrowserHistory from "history/createBrowserHistory"
+import NodFound from "../NodFound/NodFound";
+import TaskChart from "../TaskChart/TaskChart";
+import Link from "react-router-dom/es/Link";
+
+const history = createBrowserHistory();
+
+
 
 const cx = classNames.bind(styles)
-
 
 
 export default class App extends React.Component {
@@ -153,8 +160,10 @@ export default class App extends React.Component {
         localStorage.setItem("state", JSON.stringify( { ...this.state, modalOpen: !this.state.modalOpen}));
     }
     handleChange = (event, value) => {
-        this.setState({ TabContainerOpen: value });
-        localStorage.setItem("state", JSON.stringify( { ...this.state, TabContainerOpen: value}));
+        history.push('/TaskChart');
+        // this.setState({ TabContainerOpen: value });
+        // this.context.router.push(`/genre/${value}`)
+        // localStorage.setItem("state", JSON.stringify( { ...this.state, TabContainerOpen: value}));
     }
     changeName = ({target}) => {
         this.setState({ nameTask: target.value});
@@ -162,53 +171,68 @@ export default class App extends React.Component {
     }
     render() {
         const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen } = this.state;
+        console.log(history)
         return (
-            <div className={cx('container')}>
-                {modalOpen && <div className={cx('modalWindow')}>
-                    <div className={cx('modalBlock')}>
-                        <h2>Empty task name</h2>
-                        <span>You are tryning close your task without name, enter the title and try again!</span>
-                        <button
-                            onClick={this.closeModal}
-                        >
-                            CLOSE
-                        </button>
+            <Router>
+                <div className={cx('container')}>
+                    {modalOpen && <div className={cx('modalWindow')}>
+                        <div className={cx('modalBlock')}>
+                            <h2>Empty task name</h2>
+                            <span>You are tryning close your task without name, enter the title and try again!</span>
+                            <button
+                                onClick={this.closeModal}
+                            >
+                                CLOSE
+                            </button>
+                        </div>
+                    </div>}
+                    <TextField
+                        id="standard-dense"
+                        label="Name of your task"
+                        className={cx('standard-dense')}
+                        value={nameTask}
+                        onChange={this.changeName}
+                    />
+                    <div className={cx('timerCircle')}>
+                        <span>{date.toLocaleTimeString()}</span>
                     </div>
-                </div>}
-                <TextField
-                    id="standard-dense"
-                    label="Name of your task"
-                    className={cx('standard-dense')}
-                    value={nameTask}
-                    onChange={this.changeName}
-                />
-                <div className={cx('timerCircle')}>
-                    <span>{date.toLocaleTimeString()}</span>
-                </div>
-                <Button
-                    variant="contained"
-                    className={cx('buttonStop')}
-                    onClick={this.startTime}
-                >
-                    {buttonState ? "START" : "STOP"}
-                </Button>
-
-                <AppBar position="static" className={cx('AppBar')}>
-                    <Tabs
-                        fullWidth
-                        value={TabContainerOpen}
-                        onChange={this.handleChange}
-                        indicatorColor="primary"
-                        className={cx('tabsClass')}
-                        indicator={cx('indicatorClass')}
+                    <Button
+                        variant="contained"
+                        className={cx('buttonStop')}
+                        onClick={this.startTime}
                     >
-                            <Tab label="TASKS LOG" />
-                            <Tab label="TASKS CHART" />
-                    </Tabs>
-                </AppBar>
-                {TabContainerOpen === 0 &&  <TableTask rows={rows}/>}
-            </div>
+                        {buttonState ? "START" : "STOP"}
+                    </Button>
 
+                    <AppBar position="static" className={cx('AppBar')}>
+                        <Tabs
+                            fullWidth
+                            value={TabContainerOpen}
+                            onChange={this.handleChange}
+
+                            className={cx('tabsClass')}
+                            indicator={cx('indicatorClass')}
+                            TabIndicatorProps={cx('indicatorClass')}
+                        >
+                            <Tab label="TASKS LOG">
+
+                            </Tab>
+                            <Tab label="TASKS CHART">
+
+                            </Tab>
+                        </Tabs>
+                    </AppBar>
+                    <Switch>
+                        <Route exact path="/" render={(props) => {
+                            const rowss = rows
+                            return <TableTask rows={rowss} />
+                        }}/>
+                        <Route path="/TaskChart" component={TaskChart}/>
+                        <Route component={NodFound}/>
+                        {/*<Redirect to="/"/>*/}
+                    </Switch>
+                </div>
+            </Router>
         )
     }
 }

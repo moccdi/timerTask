@@ -86,13 +86,18 @@ body{
     .tabsClass{
       background: #1fbcd3;
     }
-    .MuiPrivateTabIndicator-colorPrimary-140{
-         background: #fc4482;
-    }
+    //.MuiPrivateTabIndicator-colorPrimary-140{
+    //     background: #fc4482;
+    //}
+  .indicatorClass{
+    background: #08d323;
+  }
   }
 }
 
-
+.indicatorClass{
+  background: #08d323;
+}
 
 
 
