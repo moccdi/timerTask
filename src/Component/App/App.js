@@ -72,9 +72,9 @@ export default class App extends Component {
     componentWillMount() {
         let localStorageState = localStorage.getItem("localStorageState");
         let localState = localStorage.getItem("state");
-        this.setState(State => ({ taskPage: JSON.parse(localState).taskPage,}))
+        this.setState((prevState) => ({ taskPage: JSON.parse(localState).taskPage,}))
         if(localStorageState === "run") {
-            this.setState(State => ({
+            this.setState((prevState) => ({
                 date: new Date(new Date() - new Date(JSON.parse(localState).dataStart) - 10800000),
                 dataStart: new Date(JSON.parse(localState).dataStart),
                 nameTask: JSON.parse(localState).nameTask,
@@ -82,7 +82,6 @@ export default class App extends Component {
                 modalOpen: JSON.parse(localState).modalOpen,
                 buttonState: JSON.parse(localState).buttonState,
                 rows: JSON.parse(localState).rows,
-                taskPage: JSON.parse(localState).taskPage,
             }))
             this.timerID = setInterval(
                 () => this.tick(),
@@ -90,7 +89,7 @@ export default class App extends Component {
             );
         }
         if(localStorageState === "finish"){
-            this.setState(State => ({
+            this.setState((prevState) => ({
                 rows: JSON.parse(localState).rows,
                 TabContainerOpen: JSON.parse(localState).TabContainerOpen,
             }))
@@ -171,7 +170,6 @@ export default class App extends Component {
         this.setState({ taskPage: idTask})
         localStorage.setItem("state", JSON.stringify( { ...this.state, taskPage: idTask}));
         history.push(`/TaskPage/${idTask}`);
-
     }
     render() {
         const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage } = this.state;
@@ -180,7 +178,7 @@ export default class App extends Component {
             <Switch>
                 <Route path={`/TaskPage/${taskPage}`} render={(props) => (
                     <TaskPage {...props} rows={rows[taskPage -1]} />)}/>
-                <Route exact path="/" render={(props) => (
+                    <Route path="/" render={(props) => (
                     <div className={cx('container')}>
                         {modalOpen && <div className={cx('modalWindow')}>
                             <div className={cx('modalBlock')}>
@@ -220,12 +218,8 @@ export default class App extends Component {
                                 indicator={cx('indicatorClass')}
                                 TabIndicatorProps={cx('indicatorClass')}
                             >
-                                <Tab label="TASKS LOG">
-
-                                </Tab>
-                                <Tab label="TASKS CHART">
-
-                                </Tab>
+                                <Tab label="TASKS LOG"/>
+                                <Tab label="TASKS CHART"/>
                             </Tabs>
                         </AppBar>
                         <Switch>
@@ -238,7 +232,7 @@ export default class App extends Component {
                 )}/>
                 <Route component={NodFound}/>
             </Switch>
-              </div>
+            </div>
         )
     }
 }
