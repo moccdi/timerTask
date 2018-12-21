@@ -12,6 +12,7 @@ body{
 .app{
   width: 100%;
 }
+
 .container {
   margin-left: auto;
   margin-right: auto;
@@ -89,9 +90,14 @@ body{
     //.MuiPrivateTabIndicator-colorPrimary-140{
     //     background: #fc4482;
     //}
-  .indicatorClass{
-    background: #08d323;
+    .indicatorClass{
+      background: #08d323;
+    }
   }
+  .generate{
+    margin-top: 40px;
+    margin-left: auto;
+    background: #00c4be;
   }
 }
 

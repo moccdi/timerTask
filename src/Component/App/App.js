@@ -5,18 +5,10 @@ import styles from './App.scss'
 import TableTask from "../TableTask/TableTask";
 
 import { TextField, Button, AppBar, Tabs, Tab,} from '@material-ui/core';
-import {BrowserRouter as Router, NavLink, Route, Switch,Redirect} from 'react-router-dom';
-
-// import createBrowserHistory from "history/createBrowserHistory"
-// const history = createBrowserHistory();
-
+import { Route, Switch} from 'react-router-dom';
 import NodFound from "../NodFound/NodFound";
 import TaskChart from "../TaskChart/TaskChart";
-import Link from "react-router-dom/es/Link";
 import TaskPage from "../TaskPage/TaskPage";
-
-
-
 
 
 const cx = classNames.bind(styles)
@@ -25,12 +17,13 @@ const cx = classNames.bind(styles)
 export default class App extends Component {
     state = {
         date: new Date(70, 0),
-        dataStart: null,
+        dateStart: false,
         nameTask: "",
         TabContainerOpen: 0,
         modalOpen: false,
         buttonState: true,
         taskPage: null,
+        indexRow: 1,
         rows: [{
             id: 1,
             task: "lorem ipsum d...",
@@ -60,55 +53,50 @@ export default class App extends Component {
             timeSpend: "1969-12-30T21:08:53.000Z",
         }]
     };
-
     tick = () => {
         this.setState({
-            date:  new Date(this.state.date.getTime() + 1000),
+            date: new Date(this.state.date.getTime() + 1000),
         });
-
-        // localStorage.setItem( "date", new Date( new Date() - this.state.dataStart -10800000));
-        // console.log(new Date( new Date() - this.state.dataStart -10800000).toLocaleTimeString())
     }
     componentWillMount() {
-        let localStorageState = localStorage.getItem("localStorageState");
         let localState = localStorage.getItem("state");
-        if(localStorageState === "run") {
-            this.setState(prevState => ({
-                date: new Date(new Date() - new Date(JSON.parse(localState).dataStart) - 10800000),
-                dataStart: new Date(JSON.parse(localState).dataStart),
-                nameTask: JSON.parse(localState).nameTask,
-                TabContainerOpen: JSON.parse(localState).TabContainerOpen,
-                modalOpen: JSON.parse(localState).modalOpen,
-                buttonState: JSON.parse(localState).buttonState,
-                rows: JSON.parse(localState).rows,
-                taskPage: JSON.parse(localState).taskPage,
-            }))
-            this.timerID = setInterval(
-                () => this.tick(),
-                1000
-            );
+        if(localState) {
+            if (JSON.parse(localState).dateStart) {
+                this.setState(prevState => ({
+                    date: new Date(new Date() - new Date(JSON.parse(localState).dateStart) - 10800000),
+                    dateStart: new Date(JSON.parse(localState).dateStart),
+                    nameTask: JSON.parse(localState).nameTask,
+                    TabContainerOpen: JSON.parse(localState).TabContainerOpen,
+                    buttonState: JSON.parse(localState).buttonState,
+                    rows: JSON.parse(localState).rows,
+                    taskPage: JSON.parse(localState).taskPage,
+                }))
+                this.timerID = setInterval(
+                    () => this.tick(),
+                    1000
+                );
+            } else if (!JSON.parse(localState).dateStart) {
+                this.setState((prevState) => ({
+                    nameTask: JSON.parse(localState).nameTask,
+                    TabContainerOpen: JSON.parse(localState).TabContainerOpen,
+                    rows: JSON.parse(localState).rows,
+                    taskPage: JSON.parse(localState).taskPage,
+                }))
+            }
         }
-        if(localStorageState === "finish"){
-            this.setState((prevState) => ({
-                rows: JSON.parse(localState).rows,
-                TabContainerOpen: JSON.parse(localState).TabContainerOpen,
-            }))
-        }
-
     }
     startTime = () =>{
-        const {  dataStart, nameTask, buttonState, rows, } = this.state;
+        const {  dateStart, nameTask, buttonState, rows, } = this.state;
         if(buttonState) {
             this.setState({
                 buttonState: !buttonState,
-                dataStart: new Date(),
+                dateStart: new Date(),
             });
             localStorage.setItem("state", JSON.stringify(
                 { ...this.state,
                             buttonState: !buttonState,
-                            dataStart: new Date(),
+                            dateStart: new Date(),
                       }));
-            localStorage.setItem("localStorageState", "run");
             this.timerID = setInterval(
                 () => this.tick(),
                 1000
@@ -119,38 +107,56 @@ export default class App extends Component {
         }
         if(nameTask && !buttonState) {
             clearTimeout(this.timerID)
-            const newRows =  [...rows,{
-                id: rows[rows.length - 1].id + 1,
-                task: nameTask,
-                timeStart: dataStart,
-                timeEnd: new Date(),
-                timeSpend: this.state.date,
-            }]
+            let newRows
+            if(rows.length === 0){
+                newRows =  [...rows,{
+                    id: 1,
+                    task: nameTask,
+                    timeStart: dateStart,
+                    timeEnd: new Date(),
+                    timeSpend: this.state.date,
+                }]
+            } else {
+               newRows =  [...rows,{
+                    id: rows[rows.length - 1].id + 1,
+                    task: nameTask,
+                    timeStart: dateStart,
+                    timeEnd: new Date(),
+                    timeSpend: this.state.date,
+                }]
+            }
             this.setState({
                 date: new Date(70, 0),
+                dateStart: false,
                 buttonState: !buttonState,
                 nameTask: "",
                 rows: newRows,
             });
-            localStorage.setItem("localStorageState", "finish");
             localStorage.setItem("state", JSON.stringify(
                 { ...this.state,
                     date: new Date(70, 0),
+                    dateStart: false,
                     buttonState: !buttonState,
                     nameTask: "",
                     rows: newRows
-                }));
+            }));
         }
     }
     deleteTask = (id) => {
-        const { rows, } = this.state;
+        const { rows } = this.state;
         const newRows = rows.filter(arrIndex => arrIndex.id !== id)
-        this.setState({rows: newRows})
-        localStorage.setItem("state", JSON.stringify( { ...this.state, rows: newRows}));
+        this.setState({
+            rows: newRows,
+            indexRow: 1,
+        })
+        localStorage.setItem("state", JSON.stringify(
+            { ...this.state,
+                    rows: newRows,
+                    indexRow: 1
+                  }));
     }
     closeModal = () => {
         this.setState({ modalOpen: !this.state.modalOpen});
-        localStorage.setItem("state", JSON.stringify( { ...this.state, modalOpen: !this.state.modalOpen}));
     }
     handleChange = (props, event, value) => {
         if(value === 0){
@@ -166,11 +172,10 @@ export default class App extends Component {
         this.setState({ nameTask: target.value});
         localStorage.setItem("state", JSON.stringify( { ...this.state, nameTask: target.value}));
     }
-    changeTaskPage = (idTask, history) => {
-        this.setState({ taskPage: idTask})
-        localStorage.setItem("state", JSON.stringify( { ...this.state, taskPage: idTask}));
-        localStorage.setItem("localStorageState", "run");
-        history.push(`/TaskPage/${idTask}`);
+    changeTaskPage = (taskPage, history,) => {
+        this.setState({ taskPage: taskPage})
+        localStorage.setItem("state", JSON.stringify( { ...this.state, taskPage: taskPage}));
+        history.push(`/TaskPage/${taskPage}`);
     }
     render() {
         const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage } = this.state;
@@ -178,9 +183,9 @@ export default class App extends Component {
             <div>
             <Switch>
                 <Route path={`/TaskPage/${taskPage}`} render={(props) => (
-                    <TaskPage {...props} rows={rows[taskPage -1]} />)}/>
+                    <TaskPage {...props} rows={rows[taskPage - 1]} />)}/>
                     <Route path="/" render={(props) => (
-                    <div className={cx('container')}>
+                        <div className={cx('container')}>
                         {modalOpen && <div className={cx('modalWindow')}>
                             <div className={cx('modalBlock')}>
                                 <h2>Empty task name</h2>
@@ -214,10 +219,7 @@ export default class App extends Component {
                                 fullWidth
                                 value={TabContainerOpen}
                                 onChange={(event, value) => this.handleChange(props, event, value)}
-
                                 className={cx('tabsClass')}
-                                indicator={cx('indicatorClass')}
-                                TabIndicatorProps={cx('indicatorClass')}
                             >
                                 <Tab label="TASKS LOG"/>
                                 <Tab label="TASKS CHART"/>
@@ -228,11 +230,17 @@ export default class App extends Component {
                                 return <TableTask {...props} rows={rows}  deleteTask={this.deleteTask} changeTaskPage={this.changeTaskPage}/>
                             }}/>
                             <Route exact path="/TaskChart" render={(props) => {
-                                return <TaskChart {...props} rows={rows[1]} />
+                                return <TaskChart {...props} rows={rows[taskPage - 1]} />
                             }}/>
                         </Switch>
-                    </div>
-                )}/>
+                        <Button
+                            variant="contained"
+                            className={cx('generate')}
+                        >
+                            GENERATE
+                        </Button>
+                        </div>
+                    )}/>
                 <Route component={NodFound}/>
             </Switch>
             </div>

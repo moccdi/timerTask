@@ -8,41 +8,40 @@ const cx = classNames.bind(styles)
 
 
 const TableTask = ({ rows, deleteTask, history, match, changeTaskPage }) => {
-    function taskDomain() {
-        history.push(`${match.url}/sell2`);
-    }
+    let rowsLength = 1;
     return <Paper className={cx('paperClass')}>
         <Table>
             <TableHead>
                 <TableRow className={cx('tableHead')}>
                     <TableCell>№</TableCell>
-                    <TableCell numeric>Task</TableCell>
-                    <TableCell numeric>Time start</TableCell>
-                    <TableCell numeric>Time end</TableCell>
-                    <TableCell numeric>Time spend</TableCell>
-                    <TableCell numeric>Info</TableCell>
-                    <TableCell numeric>Delete</TableCell>
+                    <TableCell>Task</TableCell>
+                    <TableCell>Time start</TableCell>
+                    <TableCell>Time end</TableCell>
+                    <TableCell>Time spend</TableCell>
+                    <TableCell>Info</TableCell>
+                    <TableCell>Delete</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
                 {rows.map(row => {
+                    let taskPage = rowsLength;
                     return (
                         <TableRow key={row.id} className={cx('tableBody')}>
                             <TableCell component="th" scope="row"
-                                       className={cx('tableCell')}>{row.id}</TableCell>
-                            <TableCell numeric className={cx('tableCell')}>{row.task}</TableCell>
-                            <TableCell numeric className={cx('tableCell')}>{new Date(row.timeStart).toLocaleTimeString()}</TableCell>
-                            <TableCell numeric className={cx('tableCell')}>{new Date(row.timeEnd).toLocaleTimeString()}</TableCell>
-                            <TableCell numeric className={cx('tableCell')}>{new Date(row.timeSpend).toLocaleTimeString()}</TableCell>
-                            <TableCell numeric className={cx('tableCell')}>
+                                       className={cx('tableCell')}>{rowsLength++}</TableCell>
+                            <TableCell className={cx('tableCell')}>{row.task}</TableCell>
+                            <TableCell className={cx('tableCell')}>{new Date(row.timeStart).toLocaleTimeString()}</TableCell>
+                            <TableCell className={cx('tableCell')}>{new Date(row.timeEnd).toLocaleTimeString()}</TableCell>
+                            <TableCell className={cx('tableCell')}>{new Date(row.timeSpend).toLocaleTimeString()}</TableCell>
+                            <TableCell className={cx('tableCell')}>
                                 <Button
                                     variant="contained"
                                     className={cx('buttonStop')}
-                                    onClick={() => changeTaskPage(row.id, history)}
+                                    onClick={() => changeTaskPage(taskPage, history)}
                                 > INFO
                                 </Button>
                             </TableCell>
-                            <TableCell numeric className={cx('tableCell')}>
+                            <TableCell className={cx('tableCell')}>
                                 <Button
                                     variant="contained"
                                     className={cx('buttonStop')}
@@ -57,6 +56,5 @@ const TableTask = ({ rows, deleteTask, history, match, changeTaskPage }) => {
         </Table>
     </Paper>
 }
-
 
 export default TableTask

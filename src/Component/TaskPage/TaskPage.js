@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
 import styles from './TableTask.scss'
@@ -14,7 +14,7 @@ const TaskPage = ({ rows, history }) => {
     }
     let timeStart = new Date(rows.timeStart)
     let timeSpend = new Date(rows.timeSpend)
-    let table = []
+    let data = []
     let nowHours2;
     let nexHours;
     let time;
@@ -55,7 +55,7 @@ const TaskPage = ({ rows, history }) => {
         else {
             children = {hour: i, minutes: 0,};
         }
-        table.push(children)
+        data.push(children)
     }
     return <div className={cx('taskPage')}>
         <Button onClick={(returnHomePage)} className={cx('returnButton')}>
@@ -66,20 +66,20 @@ const TaskPage = ({ rows, history }) => {
                 <TableHead>
                     <TableRow className={cx('tableHead')}>
                         <TableCell>№</TableCell>
-                        <TableCell numeric>Task</TableCell>
-                        <TableCell numeric>Time start</TableCell>
-                        <TableCell numeric>Time end</TableCell>
-                        <TableCell numeric>Time spend</TableCell>
+                        <TableCell >Task</TableCell>
+                        <TableCell >Time start</TableCell>
+                        <TableCell >Time end</TableCell>
+                        <TableCell >Time spend</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     <TableRow key={rows.id} className={cx('tableBody')}>
                         <TableCell component="th" scope="row"
                                    className={cx('tableCell')}>{rows.id}</TableCell>
-                        <TableCell numeric className={cx('tableCell')}>{rows.task}</TableCell>
-                        <TableCell numeric className={cx('tableCell')}>{new Date(rows.timeStart).toLocaleTimeString()}</TableCell>
-                        <TableCell numeric className={cx('tableCell')}>{new Date(rows.timeEnd).toLocaleTimeString()}</TableCell>
-                        <TableCell numeric className={cx('tableCell')}>{new Date(rows.timeSpend).toLocaleTimeString()}</TableCell>
+                        <TableCell className={cx('tableCell')}>{rows.task}</TableCell>
+                        <TableCell className={cx('tableCell')}>{new Date(rows.timeStart).toLocaleTimeString()}</TableCell>
+                        <TableCell className={cx('tableCell')}>{new Date(rows.timeEnd).toLocaleTimeString()}</TableCell>
+                        <TableCell className={cx('tableCell')}>{new Date(rows.timeSpend).toLocaleTimeString()}</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
@@ -87,8 +87,8 @@ const TaskPage = ({ rows, history }) => {
 
         <BarChart width={1250}
                   height={300}
-                  data={table}
-                  margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                  data={data}
+                  margin={{top: 20, right: 30, left: 0, bottom: 5}}>
             <CartesianGrid stroke='#f5f5f5'/>
             <XAxis dataKey="hour"/>
             <YAxis/>
