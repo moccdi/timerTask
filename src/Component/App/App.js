@@ -177,6 +177,43 @@ export default class App extends Component {
         localStorage.setItem("state", JSON.stringify( { ...this.state, taskPage: taskPage}));
         history.push(`/TaskPage/${taskPage}`);
     }
+    genetateNewRows = () =>{
+        function randomNumber(min, max) {
+            var rand = min - 0.5 + Math.random() * (max - min + 1)
+            rand = Math.round(rand);
+            return rand;
+        }
+        let rowsLength = randomNumber(10, 15);
+        let newRows = [];
+        for (let i = 0; i < rowsLength; i++) {
+            let minutes = randomNumber(0, 59);
+            let hours = randomNumber(0, 23);
+
+            let timeEnd = new Date(70, 0,0,hours,minutes)
+            let timeSpendMinutes = randomNumber(1, 90);
+            let timeSpend = new Date((timeSpendMinutes * 60000) -10800000)
+            let timeStart = new Date(timeEnd - (timeSpendMinutes * 60000))
+            let oneRow = {
+                id: i,
+                task: `task${i}`,
+                timeStart: timeStart,
+                timeEnd: timeEnd,
+                timeSpend: timeSpend,
+           }
+            newRows.push(oneRow)
+        }
+        this.setState((prevState) => ({
+            date: new Date(70, 0),
+            dateStart: false,
+            nameTask: "",
+            TabContainerOpen: 0,
+            modalOpen: false,
+            buttonState: true,
+            taskPage: null,
+            indexRow: 1,
+            rows: newRows
+        }))
+    }
     render() {
         const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage } = this.state;
         return (
@@ -236,6 +273,7 @@ export default class App extends Component {
                         <Button
                             variant="contained"
                             className={cx('generate')}
+                            onClick={this.genetateNewRows}
                         >
                             GENERATE
                         </Button>

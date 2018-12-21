@@ -21,41 +21,41 @@ const TaskPage = ({ rows, history }) => {
     let nowMinutes;
     let nowHours;
     for (let i = 0; i < 24; i++) {
-        let children;
+        let oneHour;
         if(i === timeStart.getHours()){
             if(timeSpend.getHours() < 1 ){
                 let minutes = 60 - timeStart.getMinutes()
                 if( minutes > timeSpend.getMinutes()){
-                    children = {hour: i, minutes: timeSpend.getMinutes()};
+                    oneHour = {hour: i, minutes: timeSpend.getMinutes()};
                 }
                 if( minutes < timeSpend.getMinutes()){
-                    children = {hour: i, minutes: minutes};
+                    oneHour = {hour: i, minutes: minutes};
                     nowMinutes = timeSpend.getMinutes() - minutes
                     nowHours2 = i + 1;
                 }
             }
             if(timeSpend.getHours() >= 1 ){
                 let minutes = 60 - timeStart.getMinutes()
-                children = {hour: i, minutes: minutes};
+                oneHour = {hour: i, minutes: minutes};
                 time = new Date(timeSpend - (minutes * 60000))
-                nexHours = time.getHours() - 1;
+                nexHours = time.getHours();
                 nowHours = i + 1
                 nowMinutes = time.getMinutes() // 3
             }
         } else if(i === nowHours2){
-            children = {hour: i, minutes:  nowMinutes};
+            oneHour = {hour: i, minutes:  nowMinutes};
 
         } else if(i === nowHours && nexHours >= 1){
             nexHours = nexHours - 1
             nowHours = nowHours + 1
-            children = {hour: i, minutes: 60};
+            oneHour = {hour: i, minutes: 60};
         } else if(i === nowHours && nexHours === 0){
-            children = {hour: i, minutes: nowMinutes};
+            oneHour = {hour: i, minutes: nowMinutes};
         }
         else {
-            children = {hour: i, minutes: 0,};
+            oneHour = {hour: i, minutes: 0,};
         }
-        data.push(children)
+        data.push(oneHour)
     }
     return <div className={cx('taskPage')}>
         <Button onClick={(returnHomePage)} className={cx('returnButton')}>
