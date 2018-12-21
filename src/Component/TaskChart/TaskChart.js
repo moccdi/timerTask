@@ -8,7 +8,7 @@ const TaskChart = ({  rows}) => {
     // timeStart: "12:27",
     //     timeEnd: "16:31",
     //     timeSpend: "04:04:",
-    // let timeStart = new Date(70, 0,0,11,51,57  )
+    // let timeStart = new Date(70, 0,0,11,51,57)
     // let timeEnd = new Date(70, 0,0,11,53,51 )
     // let timeSpend = new Date(new Date(70, 0,0,12,33,51 ) - new Date(70, 0,0,11,51,57  ) -10800000)
     // const table = []

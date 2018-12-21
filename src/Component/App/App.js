@@ -34,30 +34,30 @@ export default class App extends Component {
         rows: [{
             id: 1,
             task: "lorem ipsum d...",
-            timeStart: "11:28:14",
-            timeEnd: "11:31:23",
-            timeSpend: "00:03:08",
+            timeStart: "1969-12-31T08:28:14.000Z",
+            timeEnd: "1969-12-31T08:31:23.000Z",
+            timeSpend: "1969-12-30T21:03:08.000Z",
         },
         {
             id: 2,
             task: "long task",
-            timeStart: "09:51:57",
-            timeEnd: "11:53:38",
-            timeSpend: "02:01:41",
+            timeStart: "1969-12-31T06:51:57.000Z",
+            timeEnd: "1969-12-31T08:53:38.000Z",
+            timeSpend: "1969-12-30T23:02:41.000Z",
         },
         {
             id: 3,
             task: "some new",
-            timeStart: "12:39:51",
-            timeEnd: "12:46:19",
-            timeSpend: "00:06:28",
+            timeStart: "1969-12-31T09:39:51.000Z",
+            timeEnd: "1969-12-31T09:39:51.000Z",
+            timeSpend: "1969-12-30T21:06:28.000Z",
         },
         {
             id: 4,
             task: "last one task",
-            timeStart: "12:50:20",
-            timeEnd: "12:50:53",
-            timeSpend: "00:00:33",
+            timeStart: "1969-12-31T09:50:20.000Z",
+            timeEnd: "1969-12-31T09:50:53.000Z",
+            timeSpend: "1969-12-30T21:08:53.000Z",
         }]
     };
 
@@ -72,7 +72,6 @@ export default class App extends Component {
     componentWillMount() {
         let localStorageState = localStorage.getItem("localStorageState");
         let localState = localStorage.getItem("state");
-        //this.setState(prevState => ({ taskPage: JSON.parse(localState).taskPage}))
         if(localStorageState === "run") {
             this.setState(prevState => ({
                 date: new Date(new Date() - new Date(JSON.parse(localState).dataStart) - 10800000),
@@ -123,12 +122,12 @@ export default class App extends Component {
             const newRows =  [...rows,{
                 id: rows[rows.length - 1].id + 1,
                 task: nameTask,
-                timeStart: dataStart.toLocaleTimeString(),
-                timeEnd: new Date().toLocaleTimeString(),
-                timeSpend: this.state.date.toLocaleTimeString(),
+                timeStart: dataStart,
+                timeEnd: new Date(),
+                timeSpend: this.state.date,
             }]
             this.setState({
-                date: new Date(-10800000),
+                date: new Date(70, 0),
                 buttonState: !buttonState,
                 nameTask: "",
                 rows: newRows,
@@ -136,7 +135,7 @@ export default class App extends Component {
             localStorage.setItem("localStorageState", "finish");
             localStorage.setItem("state", JSON.stringify(
                 { ...this.state,
-                    date: new Date(-10800000),
+                    date: new Date(70, 0),
                     buttonState: !buttonState,
                     nameTask: "",
                     rows: newRows
@@ -170,80 +169,18 @@ export default class App extends Component {
     changeTaskPage = (idTask, history) => {
         this.setState({ taskPage: idTask})
         localStorage.setItem("state", JSON.stringify( { ...this.state, taskPage: idTask}));
+        localStorage.setItem("localStorageState", "run");
         history.push(`/TaskPage/${idTask}`);
     }
-
-
-
-    initialTable = () => {
-        let timeStart = new Date(70, 0,0,11,51,57  )
-        let timeEnd = new Date(70, 0,0,15,53,51 )
-        let timeSpend = new Date(new Date(70, 0,0,15,36,56 ) - new Date(70, 0,0,11,51,57  ) -10800000)
-        // 11:51
-        // 03:44:59
-        console.log(timeSpend.getMinutes())
-        const table = []
-        let minutesNextHour;
-        let NewI;
-        let nexHours;
-        let nexMinutes;
-        let time;
-        let nowHours;
-        for (let i = 0; i < 24; i++) {
-            let children;
-            if(i === timeStart.getHours()){
-                if(timeSpend.getHours() < 1 ){
-                    let minutes = 60 - timeStart.getMinutes()
-                    if( minutes > timeSpend.getMinutes()){
-                        children = {hour: i, minutes: timeSpend.getMinutes()};
-                    }
-                    if( minutes < timeSpend.getMinutes()){
-                        children = {hour: i, minutes: minutes};
-                        minutesNextHour = timeSpend.getMinutes() - minutes
-                        NewI = i + 1;
-                    }
-                }
-                if(timeSpend.getHours() >= 1 ){
-                    let minutes = 60 - timeStart.getMinutes()
-                    children = {hour: i, minutes: minutes};
-                    time = new Date(timeSpend - (minutes * 60000))
-                    nexHours = time.getHours() - 1;
-                    nowHours = i + 1
-                    nexMinutes = time.getMinutes() // 3
-                    // 03:35:59  nexHours = 0  nexMinutes = 35
-                    // console.log(time.toLocaleTimeString())
-                    // this.setState({ time: time});
-                }
-            } else if(i === NewI){
-                children = {hour: i, minutes: minutesNextHour};
-
-            } else if(i === nowHours && nexHours >= 1){
-                nexHours = nexHours - 1
-                nowHours = nowHours + 1
-                children = {hour: i, minutes: 60};
-            } else if(i === nowHours && nexHours === 0){
-                children = {hour: i, minutes: nexMinutes};
-            }
-            else {
-                children = {hour: i, minutes: 0,};
-            }
-            table.push(children)
-        }
-
-        this.setState({ table: table});
-    };
-
-
     render() {
-        const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage, table, time } = this.state;
-        console.log(table)
+        const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage } = this.state;
         return (
             <div>
             <Switch>
                 <Route path={`/TaskPage/${taskPage}`} render={(props) => (
                     <TaskPage {...props} rows={rows[taskPage -1]} />)}/>
                     <Route path="/" render={(props) => (
-                    <div className={cx('container')} onClick={this.initialTable}>
+                    <div className={cx('container')}>
                         {modalOpen && <div className={cx('modalWindow')}>
                             <div className={cx('modalBlock')}>
                                 <h2>Empty task name</h2>

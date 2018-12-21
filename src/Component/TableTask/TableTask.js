@@ -31,9 +31,9 @@ const TableTask = ({ rows, deleteTask, history, match, changeTaskPage }) => {
                             <TableCell component="th" scope="row"
                                        className={cx('tableCell')}>{row.id}</TableCell>
                             <TableCell numeric className={cx('tableCell')}>{row.task}</TableCell>
-                            <TableCell numeric className={cx('tableCell')}>{row.timeStart}</TableCell>
-                            <TableCell numeric className={cx('tableCell')}>{row.timeEnd}</TableCell>
-                            <TableCell numeric className={cx('tableCell')}>{row.timeSpend}</TableCell>
+                            <TableCell numeric className={cx('tableCell')}>{new Date(row.timeStart).toLocaleTimeString()}</TableCell>
+                            <TableCell numeric className={cx('tableCell')}>{new Date(row.timeEnd).toLocaleTimeString()}</TableCell>
+                            <TableCell numeric className={cx('tableCell')}>{new Date(row.timeSpend).toLocaleTimeString()}</TableCell>
                             <TableCell numeric className={cx('tableCell')}>
                                 <Button
                                     variant="contained"
