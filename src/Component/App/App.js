@@ -24,7 +24,7 @@ const cx = classNames.bind(styles)
 
 export default class App extends Component {
     state = {
-        date: new Date(-10800000),
+        date: new Date(70, 0),
         dataStart: null,
         nameTask: "",
         TabContainerOpen: 0,
@@ -72,9 +72,9 @@ export default class App extends Component {
     componentWillMount() {
         let localStorageState = localStorage.getItem("localStorageState");
         let localState = localStorage.getItem("state");
-        this.setState((prevState) => ({ taskPage: JSON.parse(localState).taskPage,}))
+        //this.setState(prevState => ({ taskPage: JSON.parse(localState).taskPage}))
         if(localStorageState === "run") {
-            this.setState((prevState) => ({
+            this.setState(prevState => ({
                 date: new Date(new Date() - new Date(JSON.parse(localState).dataStart) - 10800000),
                 dataStart: new Date(JSON.parse(localState).dataStart),
                 nameTask: JSON.parse(localState).nameTask,
@@ -82,6 +82,7 @@ export default class App extends Component {
                 modalOpen: JSON.parse(localState).modalOpen,
                 buttonState: JSON.parse(localState).buttonState,
                 rows: JSON.parse(localState).rows,
+                taskPage: JSON.parse(localState).taskPage,
             }))
             this.timerID = setInterval(
                 () => this.tick(),
@@ -171,15 +172,78 @@ export default class App extends Component {
         localStorage.setItem("state", JSON.stringify( { ...this.state, taskPage: idTask}));
         history.push(`/TaskPage/${idTask}`);
     }
+
+
+
+    initialTable = () => {
+        let timeStart = new Date(70, 0,0,11,51,57  )
+        let timeEnd = new Date(70, 0,0,15,53,51 )
+        let timeSpend = new Date(new Date(70, 0,0,15,36,56 ) - new Date(70, 0,0,11,51,57  ) -10800000)
+        // 11:51
+        // 03:44:59
+        console.log(timeSpend.getMinutes())
+        const table = []
+        let minutesNextHour;
+        let NewI;
+        let nexHours;
+        let nexMinutes;
+        let time;
+        let nowHours;
+        for (let i = 0; i < 24; i++) {
+            let children;
+            if(i === timeStart.getHours()){
+                if(timeSpend.getHours() < 1 ){
+                    let minutes = 60 - timeStart.getMinutes()
+                    if( minutes > timeSpend.getMinutes()){
+                        children = {hour: i, minutes: timeSpend.getMinutes()};
+                    }
+                    if( minutes < timeSpend.getMinutes()){
+                        children = {hour: i, minutes: minutes};
+                        minutesNextHour = timeSpend.getMinutes() - minutes
+                        NewI = i + 1;
+                    }
+                }
+                if(timeSpend.getHours() >= 1 ){
+                    let minutes = 60 - timeStart.getMinutes()
+                    children = {hour: i, minutes: minutes};
+                    time = new Date(timeSpend - (minutes * 60000))
+                    nexHours = time.getHours() - 1;
+                    nowHours = i + 1
+                    nexMinutes = time.getMinutes() // 3
+                    // 03:35:59  nexHours = 0  nexMinutes = 35
+                    // console.log(time.toLocaleTimeString())
+                    // this.setState({ time: time});
+                }
+            } else if(i === NewI){
+                children = {hour: i, minutes: minutesNextHour};
+
+            } else if(i === nowHours && nexHours >= 1){
+                nexHours = nexHours - 1
+                nowHours = nowHours + 1
+                children = {hour: i, minutes: 60};
+            } else if(i === nowHours && nexHours === 0){
+                children = {hour: i, minutes: nexMinutes};
+            }
+            else {
+                children = {hour: i, minutes: 0,};
+            }
+            table.push(children)
+        }
+
+        this.setState({ table: table});
+    };
+
+
     render() {
-        const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage } = this.state;
+        const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage, table, time } = this.state;
+        console.log(table)
         return (
             <div>
             <Switch>
                 <Route path={`/TaskPage/${taskPage}`} render={(props) => (
                     <TaskPage {...props} rows={rows[taskPage -1]} />)}/>
                     <Route path="/" render={(props) => (
-                    <div className={cx('container')}>
+                    <div className={cx('container')} onClick={this.initialTable}>
                         {modalOpen && <div className={cx('modalWindow')}>
                             <div className={cx('modalBlock')}>
                                 <h2>Empty task name</h2>
@@ -226,7 +290,9 @@ export default class App extends Component {
                             <Route exact path="/" render={(props) => {
                                 return <TableTask {...props} rows={rows}  deleteTask={this.deleteTask} changeTaskPage={this.changeTaskPage}/>
                             }}/>
-                            <Route path="/TaskChart" component={TaskChart}/>
+                            <Route exact path="/TaskChart" render={(props) => {
+                                return <TaskChart {...props} rows={rows[1]} />
+                            }}/>
                         </Switch>
                     </div>
                 )}/>

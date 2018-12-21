@@ -3,7 +3,60 @@ import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recha
 
 
 
-const TaskChart = ({ rows }) => {
+const TaskChart = ({  rows}) => {
+
+    // timeStart: "12:27",
+    //     timeEnd: "16:31",
+    //     timeSpend: "04:04:",
+    // let timeStart = new Date(70, 0,0,11,51,57  )
+    // let timeEnd = new Date(70, 0,0,11,53,51 )
+    // let timeSpend = new Date(new Date(70, 0,0,12,33,51 ) - new Date(70, 0,0,11,51,57  ) -10800000)
+    // const table = []
+    // function initialTable(){
+    //     const table = []
+    //     let minutesNextHour;
+    //     let NewI;
+    //     for (let i = 0; i < 24; i++) {
+    //         let children;
+    //         if(i === timeStart.getHours()){
+    //             if(timeSpend.getHours() < 1 ){
+    //                 let minutes = 60 - timeStart.getMinutes()
+    //                 if( minutes > timeSpend.getMinutes()){
+    //                     children = {hour: i, minutes: timeSpend.getMinutes()};
+    //                 }
+    //                 if( minutes < timeSpend.getMinutes()){
+    //                     children = {hour: i, minutes: minutes};
+    //                     minutesNextHour = timeSpend.getMinutes() - minutes
+    //                     NewI = i + 1;
+    //                 }
+    //             }
+    //
+    //             if(timeSpend.getHours() < 1 ){
+    //
+    //             }
+    //         }
+    //         if(i === timeStart.getHours()){
+    //
+    //         }
+    //         else {
+    //             children = {hour: i, minutes: 0,};
+    //         }
+    //         table.push(children)
+    //     }
+    //     return table
+    // };
+    // // timeStart: "09:51:57",
+    // //     timeEnd: "12:33:38",
+    // //     timeSpend: "03:41:41",
+    // console.log(table)
+    // 09:51:57 11:53:38 02:01:41
+    // console.log(rows.timeStart.substring(0,2), rows.timeEnd ,rows.timeSpend)
+    // console.log(Number(rows.timeStart.substring(0,2)))
+    // timeStart: "09:51:57",
+    //     timeEnd: "11:53:38",
+    //     timeSpend: "02:01:41",
+    //console.log(new Date(70, 0,0,9,51,57 ).getHours())
+    // console.log(new Date(new Date(70, 0,0,11,53,51 ) - new Date(70, 0,0,9,51,57  ) -10800000).toLocaleTimeString())
     const data = [
         {hour: '0', minutes: 0, },
         {hour: '1', minutes: 0, },
@@ -35,10 +88,13 @@ const TaskChart = ({ rows }) => {
         <CartesianGrid stroke='#f5f5f5'/>
         <XAxis dataKey="hour"/>
         <YAxis/>
-        <Tooltip/>
+        <Tooltip />
         <Legend/>
         <Bar dataKey="minutes" name="Minutes in the hours" fill="#344dc4"/>
     </BarChart>
+
+
+
 
 }
 
