@@ -4,7 +4,6 @@ import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recha
 
 
 const TaskChart = ({ rows }) => {
-
     let timeStart = new Date(rows.timeStart)
     let timeSpend = new Date(rows.timeSpend)
     let data = []
@@ -31,7 +30,7 @@ const TaskChart = ({ rows }) => {
                 let minutes = 60 - timeStart.getMinutes()
                 oneHour = {hour: i, minutes: minutes};
                 time = new Date(timeSpend - (minutes * 60000))
-                nexHours = time.getHours() - 1;
+                nexHours = time.getHours();
                 nowHours = i + 1
                 nowMinutes = time.getMinutes() // 3
             }

@@ -22,8 +22,7 @@ export default class App extends Component {
         TabContainerOpen: 0,
         modalOpen: false,
         buttonState: true,
-        taskPage: null,
-        indexRow: 1,
+        taskPage: 1,
         rows: [{
             id: 1,
             task: "lorem ipsum d...",
@@ -147,13 +146,11 @@ export default class App extends Component {
         const newRows = rows.filter(arrIndex => arrIndex.id !== id)
         this.setState({
             rows: newRows,
-            indexRow: 1,
         })
         localStorage.setItem("state", JSON.stringify(
             { ...this.state,
                     rows: newRows,
-                    indexRow: 1
-                  }));
+            }));
     }
     closeModal = () => {
         this.setState({ modalOpen: !this.state.modalOpen});
@@ -209,8 +206,7 @@ export default class App extends Component {
             TabContainerOpen: 0,
             modalOpen: false,
             buttonState: true,
-            taskPage: null,
-            indexRow: 1,
+            taskPage: 1,
             rows: newRows
         }))
     }
@@ -264,19 +260,17 @@ export default class App extends Component {
                         </AppBar>
                         <Switch>
                             <Route exact path="/" render={(props) => {
-                                return <TableTask {...props} rows={rows}  deleteTask={this.deleteTask} changeTaskPage={this.changeTaskPage}/>
+                                return <TableTask {...props}
+                                                  rows={rows}
+                                                  deleteTask={this.deleteTask}
+                                                  changeTaskPage={this.changeTaskPage}
+                                                  genetateNewRows={this.genetateNewRows}/>
                             }}/>
                             <Route exact path="/TaskChart" render={(props) => {
-                                return <TaskChart {...props} rows={rows[taskPage - 1]} />
+                                return <TaskChart {...props}
+                                                  rows={rows[taskPage - 1]} />
                             }}/>
                         </Switch>
-                        <Button
-                            variant="contained"
-                            className={cx('generate')}
-                            onClick={this.genetateNewRows}
-                        >
-                            GENERATE
-                        </Button>
                         </div>
                     )}/>
                 <Route component={NodFound}/>
