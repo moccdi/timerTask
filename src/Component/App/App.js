@@ -85,7 +85,7 @@ export default class App extends Component {
         }
     }
     startTime = () =>{
-        const {  dateStart, nameTask, buttonState, rows, } = this.state;
+        const { dateStart, nameTask, buttonState, rows } = this.state;
         if(buttonState) {
             this.setState({
                 buttonState: !buttonState,
@@ -213,7 +213,6 @@ export default class App extends Component {
     render() {
         const { date, rows, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage } = this.state;
         return (
-            <div>
             <Switch>
                 <Route path={`/TaskPage/${taskPage}`} render={(props) => (
                     <TaskPage {...props} rows={rows[taskPage - 1]} />)}/>
@@ -275,7 +274,7 @@ export default class App extends Component {
                     )}/>
                 <Route component={NodFound}/>
             </Switch>
-            </div>
+
         )
     }
 }

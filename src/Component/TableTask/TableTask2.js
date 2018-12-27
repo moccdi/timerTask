@@ -7,7 +7,7 @@ import {Button, Paper, Table, TableBody, TableCell, TableHead, TableRow} from "@
 const cx = classNames.bind(styles)
 
 
-const TableTask = ({rows, deleteTask, history, match, changeTaskPage, genetateNewRows}) => {
+const TableTask2 = ({rows, deleteTask, history, match, changeTaskPage, genetateNewRows }) => {
     let rowsLength = 1;
     return <div className={cx('tableTask')}>
         <Paper className={cx('paperClass')}>
@@ -49,7 +49,7 @@ const TableTask = ({rows, deleteTask, history, match, changeTaskPage, genetateNe
                                     <Button
                                         variant="contained"
                                         className={cx('buttonStop')}
-                                        onClick={() => deleteTask(row.id)}
+                                        onClick={() => deleteTask(row.id,rows)}
                                     > DELETE
                                     </Button>
                                 </TableCell>
@@ -71,4 +71,4 @@ const TableTask = ({rows, deleteTask, history, match, changeTaskPage, genetateNe
 
 }
 
-export default TableTask
+export default TableTask2
