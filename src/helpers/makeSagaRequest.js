@@ -1,6 +1,6 @@
 import {call, cancel, fork, put, take,} from "redux-saga/effects";
 import {delay, eventChannel, takeEvery} from "redux-saga";
-
+import { push } from 'connected-react-router'
 
 
 
@@ -139,7 +139,7 @@ export function ChangeNameRequest() {
 
 
 
-export function GenetateNewRowsRequest(getData) {
+export function GenetateNewRowsRequest() {
     return function* (action) {
         function randomNumber(min, max) {
             var rand = min - 0.5 + Math.random() * (max - min + 1)
@@ -172,7 +172,6 @@ export function GenetateNewRowsRequest(getData) {
                 newRows,
             })
         } catch (error) {
-
             yield put({
                 type: "GenetateNewRows_FAILURE",
                 error,
@@ -180,6 +179,39 @@ export function GenetateNewRowsRequest(getData) {
         }
     };
 }
+
+
+
+
+export function handleChangeRequest() {
+    return function* (action) {
+        try {
+            yield put(push('/TaskChart'))
+            // if(action.value === 0){
+            //     action.history.push('/TaskChart');
+            //     yield put({
+            //         type: "handleChange_SUCCESS",
+            //         TabContainerOpen: action.value,
+            //         history:  action.history,
+            //     });
+            // }
+            // if(action.value === 1){
+            //     action.history.push('/TaskChart');
+            //     yield put({
+            //         type: "handleChange_SUCCESS",
+            //         TabContainerOpen: action.value,
+            //         history:  action.history,
+            //     });
+            // }
+        } catch (error) {
+            yield put({
+                type: "handleChange_FAILURE",
+                error,
+            });
+        }
+    };
+}
+
 
 
 

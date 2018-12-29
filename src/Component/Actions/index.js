@@ -19,7 +19,10 @@ export function genetateNewRows() {
     return{ type: 'genetateNewRows',};
 }
 
-
+export function handleChange(props, event, value) {
+    console.log(props,'111', event, '222',value)
+    return{ type: 'handleChange', value};
+}
 
 
 

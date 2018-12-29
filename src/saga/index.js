@@ -1,7 +1,7 @@
 import {takeLatest, all} from 'redux-saga/effects';
 
 import {
-    DeleteTaskRequest, StartTimeRequest, CloseModalRequest, ChangeNameRequest, GenetateNewRowsRequest
+    DeleteTaskRequest, StartTimeRequest, CloseModalRequest, ChangeNameRequest, GenetateNewRowsRequest, handleChangeRequest
 } from "../helpers/makeSagaRequest";
 
 
@@ -25,6 +25,10 @@ function* genetateNewRowsSaga() {
     yield takeLatest('genetateNewRows', GenetateNewRowsRequest())
 }
 
+function* handleChangeSaga() {
+    yield takeLatest('handleChange', handleChangeRequest())
+}
+
 
 
 // export function* chooseFilter() {
@@ -45,6 +49,7 @@ export default function* () {
         closeModalSaga(),
         changeNameSaga(),
         genetateNewRowsSaga(),
+        handleChangeSaga(),
     ])
 }
 

@@ -1,7 +1,9 @@
 import {compose, withHandlers} from 'recompose';
 import { connect } from 'react-redux';
 import App2 from './App2';
-import { deleteTask, startTime, closeModal, changeName, genetateNewRows } from "../Actions";
+import {
+    deleteTask, startTime, closeModal, changeName, genetateNewRows, handleChange
+} from "../Actions";
 
 
 
@@ -16,6 +18,7 @@ export default compose(
             closeModal,
             changeName,
             genetateNewRows,
+            handleChange,
         }
         ),
     withHandlers({
@@ -33,6 +36,7 @@ export default compose(
                 clearTimeout(timerID)
                 props.startTime( buttonState, nameTask, rows, dateStart, date)
             } else if(!nameTask && !buttonState) {
+                clearTimeout(timerID)
                 props.startTime( buttonState, nameTask)
             }
         },

@@ -95,6 +95,29 @@ export default function stateReducer(state = initialState,action) {
             }
         }
 
+        case "handleChange_SUCCESS" : {
+            return {
+                ...state,
+                TabContainerOpen: action.TabContainerOpen,
+
+            }
+        }
+        case "handleChange_SUCCESS" : {
+            return {
+                ...state,
+                TabContainerOpen: action.TabContainerOpen,
+            }
+        }
+
+        case "handleChange_FAILURE" : {
+            return {
+                ...state,
+                error: action.error,
+            }
+        }
+
+
+
 
         default:
             return state;
