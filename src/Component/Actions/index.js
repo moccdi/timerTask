@@ -19,10 +19,16 @@ export function genetateNewRows() {
     return{ type: 'genetateNewRows',};
 }
 
-export function handleChange(props, event, value) {
-    console.log(props,'111', event, '222',value)
+export function handleChange(value) {
     return{ type: 'handleChange', value};
 }
+
+export function changeTaskPage(taskPage) {
+    return{ type: 'changeTaskPage', taskPage};
+}
+
+
+
 
 
 

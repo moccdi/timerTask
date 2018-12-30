@@ -95,20 +95,13 @@ export default function stateReducer(state = initialState,action) {
             }
         }
 
-        case "handleChange_SUCCESS" : {
-            return {
-                ...state,
-                TabContainerOpen: action.TabContainerOpen,
 
-            }
-        }
         case "handleChange_SUCCESS" : {
             return {
                 ...state,
                 TabContainerOpen: action.TabContainerOpen,
             }
         }
-
         case "handleChange_FAILURE" : {
             return {
                 ...state,
@@ -116,6 +109,33 @@ export default function stateReducer(state = initialState,action) {
             }
         }
 
+
+        case "ChangeTaskPage_SUCCESS" : {
+            return {
+                ...state,
+                taskPage: action.taskPage,
+            }
+        }
+        case "ReturnHome_SUCCESS" : {
+            return {
+                ...state,
+            }
+        }
+        case "ChangeTaskPage_FAILURE" : {
+            return {
+                ...state,
+                error: action.error,
+            }
+        }
+
+
+        case "SHOW_CONGRATULATION" : {
+            console.log("SHOW_CONGRATULATION",'1111')
+            return {
+                ...state,
+
+            }
+        }
 
 
 

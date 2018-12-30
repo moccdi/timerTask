@@ -1,7 +1,6 @@
-import {call, cancel, fork, put, take,} from "redux-saga/effects";
-import {delay, eventChannel, takeEvery} from "redux-saga";
+import { put } from "redux-saga/effects";
 import { push } from 'connected-react-router'
-
+import { delay } from 'redux-saga'
 
 
 
@@ -9,11 +8,9 @@ export function StartTimeRequest() {
     return function* (action) {
         const { date, buttonState, nameTask, rows, dateStart } = action
         try {
-            if(buttonState) {
-                console.log('111')
-                yield put({
-                    type: "StartTime_STARTInterval",
-                })
+            while (buttonState) {
+                yield delay(1000)
+                yield put({ type: 'StartTime_STARTInterval' })
             }
             if(!nameTask && !buttonState) {
                 yield put({
@@ -21,7 +18,6 @@ export function StartTimeRequest() {
                 })
             }
             if(nameTask && !buttonState) {
-                console.log('22')
                 let newRows;
                 if(rows.length === 0){
                     newRows =  [...rows,{
@@ -51,38 +47,12 @@ export function StartTimeRequest() {
                 error,
             });
         }
-
-
-        // const runner = yield call(setInterval, () => {
-        //     console.log('yes');
-        // }, 1000);
-        //
-        // try {
-        //     while (true) {
-        //         yield put({
-        //             type: "StartTime_STARTInterval",
-        //         })
-        //         yield call(delay, 1000)
-        //
-        //     }
-        // } finally {
-        //
-        // }
-
-
     };
 }
 
 
-
-
-
-
-
-
 export function DeleteTaskRequest() {
     return function* (action) {
-
         try {
             const newRows = action.rows.filter(arrIndex => arrIndex.id !== action.id)
             yield put({
@@ -90,7 +60,6 @@ export function DeleteTaskRequest() {
                 rows: newRows,
 
             })
-
         } catch (error) {
             yield put({
                 type: "DeleteTask_FAILURE",
@@ -99,7 +68,6 @@ export function DeleteTaskRequest() {
         }
     };
 }
-
 
 
 export function CloseModalRequest() {
@@ -127,7 +95,6 @@ export function ChangeNameRequest() {
                 nameTask: action.nameTask,
 
             })
-
         } catch (error) {
             yield put({
                 type: "ChangeName_FAILURE",
@@ -142,7 +109,7 @@ export function ChangeNameRequest() {
 export function GenetateNewRowsRequest() {
     return function* (action) {
         function randomNumber(min, max) {
-            var rand = min - 0.5 + Math.random() * (max - min + 1)
+            let rand = min - 0.5 + Math.random() * (max - min + 1)
             rand = Math.round(rand);
             return rand;
         }
@@ -159,7 +126,7 @@ export function GenetateNewRowsRequest() {
                 let timeStart = new Date(timeEnd - (timeSpendMinutes * 60000))
                 let oneRow = {
                     id: i,
-                    task: `task${i}`,
+                    task: `Task ${i+1}`,
                     timeStart: timeStart,
                     timeEnd: timeEnd,
                     timeSpend: timeSpend,
@@ -183,26 +150,23 @@ export function GenetateNewRowsRequest() {
 
 
 
-export function handleChangeRequest() {
+export function HandleChangeRequest() {
     return function* (action) {
         try {
-            yield put(push('/TaskChart'))
-            // if(action.value === 0){
-            //     action.history.push('/TaskChart');
-            //     yield put({
-            //         type: "handleChange_SUCCESS",
-            //         TabContainerOpen: action.value,
-            //         history:  action.history,
-            //     });
-            // }
-            // if(action.value === 1){
-            //     action.history.push('/TaskChart');
-            //     yield put({
-            //         type: "handleChange_SUCCESS",
-            //         TabContainerOpen: action.value,
-            //         history:  action.history,
-            //     });
-            // }
+            if(action.value === 0){
+                yield put(push('/'))
+                yield put({
+                    type: "handleChange_SUCCESS",
+                    TabContainerOpen: action.value,
+                });
+            }
+            if(action.value === 1){
+                yield put(push('/TaskChart'))
+                yield put({
+                    type: "handleChange_SUCCESS",
+                    TabContainerOpen: action.value,
+                });
+            }
         } catch (error) {
             yield put({
                 type: "handleChange_FAILURE",
@@ -212,24 +176,26 @@ export function handleChangeRequest() {
     };
 }
 
-
-
-
-export function makeSagaRequest(getData) {
+export function ChangeTaskPageRequest() {
     return function* (action) {
-        yield put({
-            type: `${action.type}_PENDING`,
-        });
         try {
-            const results = yield call(getData,action.payload);
-            yield put({
-                type: `${action.type}_SUCCESS`,
-                results,
-            })
-        } catch (error) {
+            if(typeof(action.taskPage) === "number") {
+                yield put({
+                    type: "ChangeTaskPage_SUCCESS",
+                    taskPage: action.taskPage
+                });
+                yield put(push(`/TaskPage/${action.taskPage}`))
+            }
+            if(action.taskPage === 'return') {
+                yield put({
+                    type: "ReturnHome_SUCCESS",
+                });
+                yield put(push('/'))
+            }
 
+        } catch (error) {
             yield put({
-                type: `${action.type}_FAILURE`,
+                type: "ChangeTaskPage_FAILURE",
                 error,
             });
         }
@@ -240,106 +206,25 @@ export function makeSagaRequest(getData) {
 
 
 
-export function SetFilterSaga() {
-    return function* (action) {
-        try {
-            if (action.sectorFilter === "Gender") {
-                yield put({
-                    type: `${action.type}_GENDER_SUCCESS`,
-                    filter: action.filter,
-                })
-            }
-            else if (action.sectorFilter === "Hair Color") {
-                yield put({
-                    type: `${action.type}_HAIRCOLOR_SUCCESS`,
-                    filter: action.filter,
-                })
-            }
-            else if  (action.sectorFilter === "Mass") {
-                yield put({
-                    type: `${action.type}_MASS_SUCCESS`,
-                    filter: action.filter,
-                })
-            }
-        } catch (error) {
-
-            yield put({
-                type: `${action.type}_FAILURE`,
-                error,
-            });
-        }
-    };
-}
-
-export function ArrowSaga() {
-    return function* (action) {
-        try {
-                if(action.arrowClass === "fa fa-arrows-v" || action.arrowClass === "fa fa-arrow-up" ){
-                    yield put({
-                        type: `${action.type}_${action.arrowId}_SUCCESS`,
-                        arrowClass: 'fa fa-arrow-down',
-                    })
-                }
-                if(action.arrowClass === "fa fa-arrow-down" ){
-                    yield put({
-                        type: `${action.type}_${action.arrowId}_SUCCESS`,
-                        arrowClass: 'fa fa-arrow-up',
-                    })
-                }
-        } catch (error) {
-            yield put({
-                type: `${action.type}_FAILURE`,
-                error,
-            });
-        }
-    };
-}
 
 
 
 
-export function NewTableSagaRequest(getDataTable) {
-    return function* (action) {
-        //console.log('111111111',action,getDataTable)
-        yield put({
-            type: `${action.type}_PENDING`,
-        });
-        try {
-            if (action.payload === undefined || action.payload === false) {
-                const homeworldData = yield call(getDataTable,action.homeworld);
-                const speciesData = yield call(getDataTable,action.species);
-                const vehiclesData = yield call(getDataTable,action.vehicles);
-                const newResults = [
-                    ...action.results.slice(0, action.index),
-                    { ...action.results[action.index], homeworldData: homeworldData, speciesData: speciesData, vehiclesData: vehiclesData,isOpen:true, },
-                    ...action.results.slice(action.index + 1 ),
-                ];
-                yield put({
-                    results: newResults,
-                    type: `${action.type}_LOADING_SUCCESS`,
-                })
-            }
-            if (action.payload === true ){
-                const newResults = [
-                    ...action.results.slice(0, action.index),
-                    { ...action.results[action.index], homeworldData: null, speciesData: null, vehiclesData: null,isOpen:false, },
-                    ...action.results.slice(action.index + 1 ),
-                ];
-                yield put({
-                    results: newResults,
-                    type: `${action.type}_DELETE`,
-                })
-            }
-        } catch (error) {
-            yield put({
-                type: `${action.type}_FAILURE`,
-                error,
-            });
-        }
-    };
-}
-
-
+// const runner = yield call(setInterval, () => {
+//     console.log('yes');
+// }, 1000);
+//
+// try {
+//     while (true) {
+//         yield put({
+//             type: "StartTime_STARTInterval",
+//         })
+//         yield call(delay, 1000)
+//
+//     }
+// } finally {
+//
+// }
 
 
 

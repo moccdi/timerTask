@@ -1,8 +1,8 @@
 import {compose, withHandlers} from 'recompose';
 import { connect } from 'react-redux';
-import App2 from './App2';
+import App from './App';
 import {
-    deleteTask, startTime, closeModal, changeName, genetateNewRows, handleChange
+    deleteTask, startTime, closeModal, changeName, genetateNewRows, handleChange, changeTaskPage
 } from "../Actions";
 
 
@@ -19,26 +19,20 @@ export default compose(
             changeName,
             genetateNewRows,
             handleChange,
+            changeTaskPage,
         }
         ),
     withHandlers({
         startTimeHandlers: props => () => {
             const { date, buttonState, nameTask, rows, dateStart } = props.initialState
-            let timerID;
             if(buttonState){
-                timerID = setInterval(
-                    () => (
-                        props.startTime(buttonState)
-                    ),
-                    1000
-                );
+                props.startTime(buttonState)
+
             } else if(nameTask && !buttonState) {
-                clearTimeout(timerID)
                 props.startTime( buttonState, nameTask, rows, dateStart, date)
             } else if(!nameTask && !buttonState) {
-                clearTimeout(timerID)
                 props.startTime( buttonState, nameTask)
             }
         },
     }),
-)(App2);
+)(App);

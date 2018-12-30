@@ -1,17 +1,22 @@
-import {takeLatest, all} from 'redux-saga/effects';
+import {takeLatest, all, takeEvery, select} from 'redux-saga/effects';
 
 import {
-    DeleteTaskRequest, StartTimeRequest, CloseModalRequest, ChangeNameRequest, GenetateNewRowsRequest, handleChangeRequest
+    DeleteTaskRequest,
+    StartTimeRequest,
+    CloseModalRequest,
+    ChangeNameRequest,
+    GenetateNewRowsRequest,
+    HandleChangeRequest,
+    ChangeTaskPageRequest,
 } from "../helpers/makeSagaRequest";
 
 
+function* StartTimeSaga() {
+    yield takeLatest('StartTime', StartTimeRequest())
+}
 
 function* DeleteTaskSaga() {
     yield takeLatest('DeleteTask', DeleteTaskRequest())
-}
-
-function* StartTimeSaga() {
-    yield takeLatest('StartTime', StartTimeRequest())
 }
 
 function* closeModalSaga() {
@@ -26,21 +31,14 @@ function* genetateNewRowsSaga() {
 }
 
 function* handleChangeSaga() {
-    yield takeLatest('handleChange', handleChangeRequest())
+    yield takeLatest('handleChange', HandleChangeRequest())
+}
+function* changeTaskPageSaga() {
+    yield takeLatest('changeTaskPage', ChangeTaskPageRequest())
 }
 
 
 
-// export function* chooseFilter() {
-//     yield takeLatest('FILTER',)
-// }
-// export function* arrows() {
-//     yield takeLatest('ARROW',ArrowSaga())
-// }
-//
-// export function* newTable() {
-//     yield takeLatest('NEWTABLE',NewTableSagaRequest(getDataTable))
-// }
 
 export default function* () {
     yield all([
@@ -50,6 +48,28 @@ export default function* () {
         changeNameSaga(),
         genetateNewRowsSaga(),
         handleChangeSaga(),
+        changeTaskPageSaga(),
+
     ])
 }
 
+
+// function* watchFirstThreeTodosCreation() {
+//     for (let i = 0; i < 4; i++) {
+//         const action = yield take('StartTime')
+//     }
+//     yield put({type: 'SHOW_CONGRATULATION'})
+// }
+
+
+
+// export function* watchIncrementAsync() {
+//     //yield takeEvery('StartTime', incrementAsync)
+//     yield takeEvery('StartTime', function* logger(action) {
+//         const state = yield select()
+//
+//         console.log('action', action)
+//         console.log('state after', state)
+//     })
+//
+// }
