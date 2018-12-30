@@ -16,6 +16,10 @@ export function StartTimeRequest() {
                 yield put({
                     type: "StartTime_ModalOpen",
                 })
+                while (true) {
+                    yield delay(1000)
+                    yield put({ type: 'StartTime_STARTInterval' })
+                }
             }
             if(nameTask && !buttonState) {
                 let newRows;
