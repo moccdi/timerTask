@@ -1,30 +1,30 @@
 
 
 export function deleteTask(id, rows) {
-    return{ type: 'DeleteTask', id, rows };
+    return{ type: 'DELETE_TASK', id, rows };
 }
 
-export function startTime( buttonState, nameTask, rows, dateStart, date) {
-    return{ type: 'StartTime', buttonState, nameTask, rows, dateStart, date};
+export function startTime(runData, date,  buttonState, nameTask, rows, dateStart,) {
+    return{ type: 'START_TIME', runData, date, buttonState, nameTask, rows, dateStart, };
 }
 
 export function closeModal() {
-    return{ type: 'closeModal'};
+    return{ type: 'CLOSE_MODAL'};
 }
 export function changeName({target}) {
-    return{ type: 'changeName', nameTask: target.value};
+    return{ type: 'CHANGE_NAME', nameTask: target.value};
 }
 
 export function genetateNewRows() {
-    return{ type: 'genetateNewRows',};
+    return{ type: 'GENERATE_NEWROWS',};
 }
 
 export function handleChange(value) {
-    return{ type: 'handleChange', value};
+    return{ type: 'HANDLE_CHANGE', value};
 }
 
 export function changeTaskPage(taskPage) {
-    return{ type: 'changeTaskPage', taskPage};
+    return{ type: 'CHANGE_TASKPAGE', taskPage};
 }
 
 

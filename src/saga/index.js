@@ -1,40 +1,40 @@
 import {takeLatest, all, takeEvery, select} from 'redux-saga/effects';
 
 import {
-    DeleteTaskRequest,
-    StartTimeRequest,
-    CloseModalRequest,
-    ChangeNameRequest,
-    GenetateNewRowsRequest,
-    HandleChangeRequest,
-    ChangeTaskPageRequest,
-} from "../helpers/makeSagaRequest";
+    DeleteTaskSaga,
+    StartTimeSaga,
+    CloseModalSaga,
+    ChangeNameSaga,
+    GenerateNewRowsSaga,
+    HandleChangeSaga,
+    ChangeTaskPageSaga,
+} from "../helpers/makeSaga";
 
 
-function* StartTimeSaga() {
-    yield takeLatest('StartTime', StartTimeRequest())
+function* StartTime() {
+    yield takeEvery('START_TIME', StartTimeSaga())
 }
 
-function* DeleteTaskSaga() {
-    yield takeLatest('DeleteTask', DeleteTaskRequest())
+function* DeleteTask() {
+    yield takeLatest('DELETE_TASK', DeleteTaskSaga())
 }
 
-function* closeModalSaga() {
-    yield takeLatest('closeModal', CloseModalRequest())
+function* closeModal() {
+    yield takeLatest('CLOSE_MODAL', CloseModalSaga())
 }
 
-function* changeNameSaga() {
-    yield takeLatest('changeName', ChangeNameRequest())
+function* changeName() {
+    yield takeLatest('CHANGE_NAME', ChangeNameSaga())
 }
-function* genetateNewRowsSaga() {
-    yield takeLatest('genetateNewRows', GenetateNewRowsRequest())
+function* generateNewRows() {
+    yield takeLatest('GENERATE_NEWROWS', GenerateNewRowsSaga())
 }
 
-function* handleChangeSaga() {
-    yield takeLatest('handleChange', HandleChangeRequest())
+function* handleChange() {
+    yield takeLatest('HANDLE_CHANGE', HandleChangeSaga())
 }
-function* changeTaskPageSaga() {
-    yield takeLatest('changeTaskPage', ChangeTaskPageRequest())
+function* changeTaskPage() {
+    yield takeLatest('CHANGE_TASKPAGE', ChangeTaskPageSaga())
 }
 
 
@@ -42,13 +42,13 @@ function* changeTaskPageSaga() {
 
 export default function* () {
     yield all([
-        DeleteTaskSaga(),
-        StartTimeSaga(),
-        closeModalSaga(),
-        changeNameSaga(),
-        genetateNewRowsSaga(),
-        handleChangeSaga(),
-        changeTaskPageSaga(),
+        DeleteTask(),
+        StartTime(),
+        closeModal(),
+        changeName(),
+        generateNewRows(),
+        handleChange(),
+        changeTaskPage(),
 
     ])
 }

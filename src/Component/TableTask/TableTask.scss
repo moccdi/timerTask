@@ -15,8 +15,11 @@
     .tableBody {
       height: 75px;
       background: #eaf6ff;
-
       .tableCell {
+        @extend %colorBlue
+      }
+      .buttonTable{
+        background-color: #fff;
         @extend %colorBlue
       }
     }

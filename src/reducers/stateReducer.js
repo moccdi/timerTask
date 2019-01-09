@@ -1,16 +1,19 @@
 import initialState from "../stubs/initialState";
-
+// localStorage.clear();
+//payload
 
 export default function stateReducer(state = initialState,action) {
     switch (action.type) {
-        case 'DeleteTask_SUCCESS' : {
+        case 'DELETE_TASK__SUCCESS' : {
+            localStorage.setItem("state", JSON.stringify( { ...state,  rows: action.rows, taskPage: 1, error: undefined,}));
                 return {
                     ...state,
                     rows: action.rows,
+                    taskPage: 1,
                     error: undefined,
                 }
             }
-        case 'DeleteTask_FAILURE' : {
+        case 'DELETE_TASK__FAILURE' : {
             return {
                 ...state,
                 error: action.error,
@@ -18,35 +21,53 @@ export default function stateReducer(state = initialState,action) {
         }
 
 
-        case 'StartTime_STARTInterval' : {
+        case 'START_TIME__DATA' : {
+            localStorage.setItem("state", JSON.stringify({...state, dateStart: action.dateStart, error: undefined,}));
             return {
                 ...state,
-                date: new Date(state.date.getTime() + 1000),
+                dateStart: action.dateStart,
+                error: undefined,
+            }
+        }
+        case 'START_TIME__INTERVAL' : {
+            localStorage.setItem("state", JSON.stringify( { ...state, date: action.date, buttonState: false, error: undefined,}));
+            return {
+                ...state,
+                date: action.date,
                 buttonState: false,
                 error: undefined,
             }
         }
-        case 'StartTime_ModalOpen' : {
+        case 'START_TIME__MODAL_OPEN' : {
+            localStorage.setItem("state", JSON.stringify( { ...state, modalOpen: true, error: undefined,}));
             return {
                 ...state,
                 modalOpen: true,
                 error: undefined,
             }
         }
-        case 'StartTime_NEWROWS' : {
+        case 'START_TIME__NEWROWS' : {
+            localStorage.setItem("state", JSON.stringify(
+                { ...state,
+                    date: action.data,
+                    dateStart: false,
+                    runData: false,
+                    buttonState: true,
+                    nameTask: "",
+                    rows: action.newRows,
+                    error: undefined,}));
             return {
                 ...state,
-                date: new Date(70, 0),
+                date: action.data,
                 dateStart: false,
+                runData: false,
                 buttonState: true,
                 nameTask: "",
                 rows: action.newRows,
                 error: undefined,
             }
         }
-
-
-        case 'StartTime_FAILURE' : {
+        case 'START_TIME__FAILURE' : {
             return {
                 ...state,
                 error: action.error,
@@ -54,26 +75,29 @@ export default function stateReducer(state = initialState,action) {
         }
 
 
-        case 'CloseModal_CLOSE' : {
+        case 'CLOSE_MODAL__CLOSE' : {
             return {
                 ...state,
                 modalOpen: false,
+                error: undefined,
             }
         }
-        case 'CloseModal_FAILURE' : {
+        case 'CLOSE_MODAL__FAILURE' : {
             return {
                 ...state,
                 error: action.error,
             }
         }
 
-        case "ChangeName_CHANGE" : {
+        case "CHANGE_NAME__CHANGE" : {
+            localStorage.setItem("state", JSON.stringify({ ...state, nameTask: action.nameTask,}));
             return {
                 ...state,
                 nameTask: action.nameTask,
+                error: undefined,
             }
         }
-        case "ChangeName_FAILURE" : {
+        case "CHANGE_NAME__FAILURE" : {
             return {
                 ...state,
                 error: action.error,
@@ -81,10 +105,9 @@ export default function stateReducer(state = initialState,action) {
         }
 
 
-        case "GenetateNewRows_SUCCESS" : {
-            return {
-                ...state,
-                date: new Date(70, 0),
+        case "GENERATE_NEWROWS__SUCCESS" : {
+            localStorage.setItem("state", JSON.stringify({ ...state,
+                date: action.date,
                 dateStart: false,
                 nameTask: "",
                 TabContainerOpen: 0,
@@ -92,17 +115,31 @@ export default function stateReducer(state = initialState,action) {
                 buttonState: true,
                 taskPage: 1,
                 rows: action.newRows
+            }));
+            return {
+                ...state,
+                date: action.date,
+                dateStart: false,
+                nameTask: "",
+                TabContainerOpen: 0,
+                modalOpen: false,
+                buttonState: true,
+                taskPage: 1,
+                rows: action.newRows,
+                error: undefined,
             }
         }
 
 
-        case "handleChange_SUCCESS" : {
+        case "HANDLE_CHANGE__SUCCESS" : {
+            localStorage.setItem("state", JSON.stringify({ ...state, TabContainerOpen: action.TabContainerOpen,}));
             return {
                 ...state,
                 TabContainerOpen: action.TabContainerOpen,
+                error: undefined,
             }
         }
-        case "handleChange_FAILURE" : {
+        case "HANDLE_CHANGE__FAILURE" : {
             return {
                 ...state,
                 error: action.error,
@@ -110,33 +147,26 @@ export default function stateReducer(state = initialState,action) {
         }
 
 
-        case "ChangeTaskPage_SUCCESS" : {
+        case "CHANGE_TASKPAGE__SUCCESS" : {
+            localStorage.setItem("state", JSON.stringify({ ...state, taskPage: action.taskPage,}));
             return {
                 ...state,
                 taskPage: action.taskPage,
+                error: undefined,
             }
         }
-        case "ReturnHome_SUCCESS" : {
+        case "CHANGE_TASKPAGE__RETURN" : {
             return {
                 ...state,
+                error: undefined,
             }
         }
-        case "ChangeTaskPage_FAILURE" : {
+        case "CHANGE_TASKPAGE_FAILURE" : {
             return {
                 ...state,
                 error: action.error,
             }
         }
-
-
-        case "SHOW_CONGRATULATION" : {
-            console.log("SHOW_CONGRATULATION",'1111')
-            return {
-                ...state,
-
-            }
-        }
-
 
 
         default:

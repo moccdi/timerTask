@@ -66,7 +66,7 @@ const App = ({history, initialState, deleteTask, startTimeHandlers, closeModal, 
                         </AppBar>
                         <Switch>
                             <Route exact path="/" render={(props) => {
-                                return <TableTask    {...props}
+                                return <TableTask  {...props}
                                                    deleteTask={deleteTask}
                                                    genetateNewRows={genetateNewRows}
                                                    changeTaskPage={changeTaskPage}

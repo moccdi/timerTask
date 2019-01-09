@@ -10,7 +10,7 @@ import { createBrowserHistory } from 'history'
 import createSagaMiddleware from 'redux-saga'
 import saga from './saga';
 import logger from 'redux-logger';
-import { save, load } from "redux-localstorage-simple"
+
 
 import { routerMiddleware } from 'connected-react-router'
 import rootReducer from './reducers'
@@ -28,7 +28,6 @@ const store = createStore(
             routerMiddleware(history),
             sagaMiddleware,
             logger,
-
         ),
     ),
 )

@@ -1,4 +1,4 @@
-import {compose, withHandlers} from 'recompose';
+import {compose, lifecycle, withHandlers} from 'recompose';
 import { connect } from 'react-redux';
 import App from './App';
 import {
@@ -25,13 +25,22 @@ export default compose(
     withHandlers({
         startTimeHandlers: props => () => {
             const { date, buttonState, nameTask, rows, dateStart } = props.initialState
-            if(buttonState){
-                props.startTime(buttonState)
-
-            } else if(nameTask && !buttonState) {
-                props.startTime( buttonState, nameTask, rows, dateStart, date)
+            if(buttonState) {
+                props.startTime(true, date, buttonState)
             } else if(!nameTask && !buttonState) {
-                props.startTime( buttonState, nameTask)
+                console.log(nameTask,'222')
+                props.startTime(true, date, buttonState, nameTask)
+            } else if(nameTask && !buttonState) {
+                console.log(nameTask,'111')
+                props.startTime(false, date, buttonState, nameTask, rows, dateStart )
+            }
+        },
+    }),
+    lifecycle({
+        componentDidMount() {
+            const { runData, date } = this.props.initialState;
+            if(runData) {
+                this.props.startTime( runData, date )
             }
         },
     }),
