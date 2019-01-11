@@ -2,12 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
 import styles from './TableTask.scss'
-import {Button, Paper, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
-
+import { Button, Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 const cx = classNames.bind(styles)
 
 
-const TableTask = ({rows, deleteTask, history, match, changeTaskPage, genetateNewRows }) => {
+const TableTask = ({rows, deleteTask, changeTaskPage, genetateNewRows }) => {
     let rowsLength = 1;
     return <div className={cx('tableTask')}>
         <Paper className={cx('paperClass')}>
@@ -67,8 +66,12 @@ const TableTask = ({rows, deleteTask, history, match, changeTaskPage, genetateNe
             GENERATE
         </Button>
     </div>
-
-
 }
-
 export default TableTask
+
+TableTask.propTypes = {
+    rows: PropTypes.array.isRequired,
+    deleteTask: PropTypes.func.isRequired,
+    changeTaskPage: PropTypes.func.isRequired,
+    genetateNewRows: PropTypes.func.isRequired,
+}

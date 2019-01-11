@@ -2,9 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
 import styles from './TableTask.scss'
-import {Button, Paper, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
-import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
-
+import { Button, Paper, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from "recharts";
 const cx = classNames.bind(styles)
 
 
@@ -52,6 +51,10 @@ const TaskPage = ({ row, data, changeTaskPage }) => (
         </BarChart>
     </div>
 )
-
-
 export default TaskPage
+
+TaskPage.propTypes = {
+    row: PropTypes.object,
+    data: PropTypes.array.isRequired,
+    changeTaskPage: PropTypes.func.isRequired,
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import './reset.css'
 import classNames from 'classnames';
 import styles from './App.scss'
@@ -7,14 +8,11 @@ import {AppBar, Button, Tab, Tabs, TextField} from "@material-ui/core";
 import NodFound from "../NodFound/NodFound";
 import TaskChart from "../TaskChart";
 import TableTask from "../TableTask/TableTask";
-import {Route, Switch} from 'react-router'
+import {Route, Switch, Redirect} from 'react-router'
 import {ConnectedRouter} from 'connected-react-router'
-import Redirect from "react-router/es/Redirect";
-
-
-
 const cx = classNames.bind(styles)
 
+//localStorage.clear()
 
 const App = ({history, initialState, deleteTask, startTimeHandlers, closeModal, changeName, genetateNewRows, handleChange, changeTaskPage}) => {
     const {date, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage, rows} = initialState
@@ -55,7 +53,7 @@ const App = ({history, initialState, deleteTask, startTimeHandlers, closeModal, 
                         </Button>
                         <AppBar position="static" className={cx('AppBar')}>
                             <Tabs
-                                fullWidth
+                                variant="fullWidth"
                                 value={TabContainerOpen}
                                 className={cx('tabsClass')}
                                 onChange={(event, value) => handleChange(value)}
@@ -91,4 +89,16 @@ const App = ({history, initialState, deleteTask, startTimeHandlers, closeModal, 
 }
 export default App
 
-//localStorage.clear()
+
+App.propTypes = {
+    initialState: PropTypes.object,
+    deleteTask: PropTypes.func.isRequired,
+    startTime: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    changeName: PropTypes.func.isRequired,
+    genetateNewRows: PropTypes.func.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    changeTaskPage: PropTypes.func.isRequired,
+}
+
+

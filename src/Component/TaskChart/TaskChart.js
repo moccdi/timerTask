@@ -1,5 +1,7 @@
 import React from 'react'
-import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import PropTypes from "prop-types";
+
 
 
 
@@ -19,4 +21,6 @@ const TaskChart = ({data}) => (
 
 export default TaskChart
 
-
+TaskChart.propTypes = {
+        data: PropTypes.array.isRequired,
+}

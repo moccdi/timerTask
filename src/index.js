@@ -8,7 +8,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history'
 import createSagaMiddleware from 'redux-saga'
-import saga from './saga';
+import rootSaga from './saga';
 import logger from 'redux-logger';
 
 
@@ -33,7 +33,7 @@ const store = createStore(
 )
 
 
-sagaMiddleware.run(saga)
+sagaMiddleware.run(rootSaga)
 
 window.store = store;
 

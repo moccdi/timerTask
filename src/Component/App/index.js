@@ -28,10 +28,8 @@ export default compose(
             if(buttonState) {
                 props.startTime(true, date, buttonState)
             } else if(!nameTask && !buttonState) {
-                console.log(nameTask,'222')
                 props.startTime(true, date, buttonState, nameTask)
             } else if(nameTask && !buttonState) {
-                console.log(nameTask,'111')
                 props.startTime(false, date, buttonState, nameTask, rows, dateStart )
             }
         },
@@ -43,5 +41,9 @@ export default compose(
                 this.props.startTime( runData, date )
             }
         },
+        componentWillUpdate(prevProps, prevState){
+            localStorage.setItem("state", JSON.stringify( { ...prevProps.initialState}));
+        },
     }),
+
 )(App);
