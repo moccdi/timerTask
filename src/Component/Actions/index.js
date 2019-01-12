@@ -1,4 +1,3 @@
-
 export const DELETE_TASK = 'DELETE_TASK'
 export const START_TIME = 'START_TIME'
 export const CLOSE_MODAL = 'CLOSE_MODAL'
@@ -35,37 +34,35 @@ export const CHANGE_TASKPAGE__RETURN = 'CHANGE_TASKPAGE__RETURN'
 export const CHANGE_TASKPAGE__FAILURE = 'CHANGE_TASKPAGE__FAILURE'
 
 
-
 export function deleteTask(id, rows) {
-    return{ type: DELETE_TASK, id, rows };
+  return { type: DELETE_TASK, id, rows }
 }
 
-export function startTime(runData, date,  buttonState, nameTask, rows, dateStart,) {
-    return{ type: START_TIME, runData, date, buttonState, nameTask, rows, dateStart, };
+export function startTime(runData, date, buttonState, nameTask, rows, dateStart) {
+  return {
+    type: START_TIME, runData, date, buttonState, nameTask, rows, dateStart,
+  }
 }
 
 export function closeModal() {
-    return{ type: CLOSE_MODAL};
+  return { type: CLOSE_MODAL }
 }
-export function changeName({target}) {
-    return{ type: CHANGE_NAME, nameTask: target.value};
+
+export function changeName({ target }) {
+  return { type: CHANGE_NAME, nameTask: target.value }
 }
 
 export function genetateNewRows() {
-    return{ type: GENERATE_NEWROWS,};
+  return { type: GENERATE_NEWROWS }
 }
 
 export function handleChange(value) {
-    return{ type: HANDLE_CHANGE, value};
+  return { type: HANDLE_CHANGE, value }
 }
 
 export function changeTaskPage(taskPage) {
-    return{ type: CHANGE_TASKPAGE, taskPage};
+  return { type: CHANGE_TASKPAGE, taskPage }
 }
-
-
-
-
 
 
 // export function getRepos(dataName) {

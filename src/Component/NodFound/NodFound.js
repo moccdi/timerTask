@@ -1,9 +1,8 @@
 import React from 'react'
 
 
-
 const NodFound = ({ rows }) => (
-    <div>NodFound 404!!!</div>
+  <div>NodFound 404!!!</div>
 )
 
 

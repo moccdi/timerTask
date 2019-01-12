@@ -1,75 +1,76 @@
-import {takeLatest, all } from 'redux-saga/effects';
+import { takeLatest, all } from 'redux-saga/effects'
 
 import {
-    DeleteTaskSaga,
-    StartTimeSaga,
-    CloseModalSaga,
-    ChangeNameSaga,
-    GenerateNewRowsSaga,
-    HandleChangeSaga,
-    ChangeTaskPageSaga,
-} from "../helpers/sagaHelpers";
+  DeleteTaskSaga,
+  StartTimeSaga,
+  CloseModalSaga,
+  ChangeNameSaga,
+  GenerateNewRowsSaga,
+  HandleChangeSaga,
+  ChangeTaskPageSaga,
+} from '../helpers/sagaHelpers'
 
 import {
-    CHANGE_NAME,
-    CHANGE_TASKPAGE,
-    CLOSE_MODAL,
-    DELETE_TASK,
-    GENERATE_NEWROWS,
-    HANDLE_CHANGE,
-    START_TIME
-} from "../Component/Actions";
+  CHANGE_NAME,
+  CHANGE_TASKPAGE,
+  CLOSE_MODAL,
+  DELETE_TASK,
+  GENERATE_NEWROWS,
+  HANDLE_CHANGE,
+  START_TIME,
+} from '../Component/Actions'
 
 
 function* StartTime() {
-    yield takeLatest(START_TIME, StartTimeSaga())
+  yield takeLatest(START_TIME, StartTimeSaga())
 }
 
 function* DeleteTask() {
-    yield takeLatest(DELETE_TASK, DeleteTaskSaga())
+  yield takeLatest(DELETE_TASK, DeleteTaskSaga())
 }
 
 function* closeModal() {
-    yield takeLatest(CLOSE_MODAL, CloseModalSaga())
+  yield takeLatest(CLOSE_MODAL, CloseModalSaga())
 }
 
 function* changeName() {
-   yield takeLatest(CHANGE_NAME, ChangeNameSaga())
+  yield takeLatest(CHANGE_NAME, ChangeNameSaga())
 }
+
 function* generateNewRows() {
-    yield takeLatest(GENERATE_NEWROWS, GenerateNewRowsSaga())
+  yield takeLatest(GENERATE_NEWROWS, GenerateNewRowsSaga())
 }
 
 function* handleChange() {
-    yield takeLatest(HANDLE_CHANGE, HandleChangeSaga())
+  yield takeLatest(HANDLE_CHANGE, HandleChangeSaga())
 }
+
 function* changeTaskPage() {
-    yield takeLatest(CHANGE_TASKPAGE, ChangeTaskPageSaga())
+  yield takeLatest(CHANGE_TASKPAGE, ChangeTaskPageSaga())
 }
-
-
 
 
 export default function* rootSaga() {
-    yield all([
-        DeleteTask(),
-        StartTime(),
-        closeModal(),
-        changeName(),
-        generateNewRows(),
-        handleChange(),
-        changeTaskPage(),
+  yield all([
+    DeleteTask(),
+    StartTime(),
+    closeModal(),
+    changeName(),
+    generateNewRows(),
+    handleChange(),
+    changeTaskPage(),
 
-    ])
+  ])
 }
 
 
-//import {cancel, cancelled, put, select, race, call} from "redux-saga/effects";
-//import {takeLatest, all, takeEvery, select, throttle, cancelled, take,  put} from 'redux-saga/effects';
+// import {cancel, cancelled, put, select, race, call} from "redux-saga/effects";
+// import {takeLatest, all, takeEvery, select, throttle, cancelled, take,  put} from 'redux-saga/effects';
 
 // function* watchFirstThreeTodosCreation() {
 //    for (let i = 0; i < 3; i++) {
-//         yield take(CHANGE_NAME) //будет выполнент 3 раза take походу точно хз ,принимет тип  как и takeLatest только не в агрументе нету функциии ,как бы будет
+// yield take(CHANGE_NAME) //будет выполнент 3 раза take походу точно хз ,принимет тип  как и takeLatest только не в агрументе нету
+// функциии,как бы будет
 //         выполнененоесли будет той тип данный совпадаеть с экшеном
 //         let i =0;
 //         yield put({
@@ -79,15 +80,14 @@ export default function* rootSaga() {
 //         })
 //     }
 // }
-//Мы тоже делаем yield take(['LOGOUT', 'LOGIN_ERROR']). Это означает, что мы наблюдаем за 2 одновременными действиями:
-
+// Мы тоже делаем yield take(['LOGOUT', 'LOGIN_ERROR']). Это означает, что мы наблюдаем за 2 одновременными действиями:
 
 
 // function* changeName() {
 //     yield throttle(5000,CHANGE_NAME, ChangeNameSaga()) //yield throttle(5000 - когда постапует 5 секун ждем не отвечает на запросы
 // }
 
-//call Функция генератора или обычная функция, которая либо возвращает Promise в качестве результата, либо любое другое значение.
+// call Функция генератора или обычная функция, которая либо возвращает Promise в качестве результата, либо любое другое значение.
 
 // export function* watchIncrementAsync() {
 //     //yield takeEvery('StartTime', incrementAsync)
@@ -120,7 +120,7 @@ export default function* rootSaga() {
 //   }
 // }
 
-//export const getCart = state => state.cart
+// export const getCart = state => state.cart
 // import { take, fork, select } from 'redux-saga/effects'
 // import { getCart } from './selectors'
 //
