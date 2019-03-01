@@ -17,7 +17,7 @@ const cx = classNames.bind(styles)
 
 
 const App = ({
-  history, initialState, deleteTask, startTimeHandlers, closeModal, changeName, genetateNewRows, handleChange, changeTaskPage,
+  history, initialState, deleteTask, startTimeHandlers, closeModal, changeName, generateNewRows, handleChange, changeTaskPage,
 }) => {
   const {
     date, buttonState, nameTask, modalOpen, TabContainerOpen, taskPage, rows,
@@ -26,14 +26,10 @@ const App = ({
     <ConnectedRouter history={history}>
       <div>
         <Switch>
-          <Route
-            path={`/TaskPage/${taskPage}`}
-            render={props => (
+          <Route path={`/TaskPage/${taskPage}`} render={props => (
               <TaskPage {...props} row={rows[taskPage - 1]} changeTaskPage={changeTaskPage} />)}
           />
-          <Route
-            path='/'
-            render={() => (
+          <Route path='/' render={() => (
               <div className={cx('container')}>
                 {modalOpen && (
                   <div className={cx('modalWindow')}>
@@ -41,6 +37,7 @@ const App = ({
                       <h2>Empty task name</h2>
                       <span>You are tryning close your task without name, enter the title and try again!</span>
                       <button
+                        type='button'
                         onClick={closeModal}
                       >
                       CLOSE
@@ -77,23 +74,17 @@ const App = ({
                   </Tabs>
                 </AppBar>
                 <Switch>
-                  <Route
-                    exact
-                    path='/'
-                    render={props => (
+                  <Route exact path='/' render={props => (
                       <TableTask
                         {...props}
                         deleteTask={deleteTask}
-                        genetateNewRows={genetateNewRows}
+                        generateNewRows={generateNewRows}
                         changeTaskPage={changeTaskPage}
                         rows={rows}
                       />
                     )}
                   />
-                  <Route
-                    exact
-                    path='/TaskChart'
-                    render={props => (
+                  <Route exact path='/TaskChart' render={props => (
                       <TaskChart
                         {...props}
                         row={rows[taskPage - 1]}
@@ -121,7 +112,7 @@ App.propTypes = {
   startTime: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   changeName: PropTypes.func.isRequired,
-  genetateNewRows: PropTypes.func.isRequired,
+  generateNewRows: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   changeTaskPage: PropTypes.func.isRequired,
   startTimeHandlers: PropTypes.func.isRequired,

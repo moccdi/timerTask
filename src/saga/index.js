@@ -59,7 +59,6 @@ export default function* rootSaga() {
     generateNewRows(),
     handleChange(),
     changeTaskPage(),
-
   ])
 }
 

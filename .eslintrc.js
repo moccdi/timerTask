@@ -1,6 +1,6 @@
 module.exports = {
-  extends: 'airbnb',
- //extends: ['airbnb', 'plugin:jest/recommended', 'jest-enzyme'],
+  extends: ['react-app', 'airbnb', 'plugin:jsx-a11y/recommended',  ],
+  //extends: ['airbnb', 'plugin:jest/recommended', 'jest-enzyme'], //'plugin:redux-saga/recommended', 'plugin:react-redux/recommended'
   parser: 'babel-eslint',
   env: {
       "jest": true
@@ -15,12 +15,14 @@ module.exports = {
     }
   },
   rules: {
+    //"test": "react-scripts test --watchAll",
     // /* eslint react/prop-types: 0 */ -  в самом файле что бы убрать проверку по prop-types
     //  'semi': [2, 'always'], равило обеспечивает последовательное использование точек с запятой.
     //'comma-dangle': ['error', 'never'],// вконце кома
     //'indent': [2, 4], Правило обеспечивает согласованный стиль отступов. В данном примере 4 пробела.
     //'react/prop-types': [1, { 'ignore': <ignore>, customValidators: <customValidator> }],
-    "react/prop-types": 0,
+    //"react-redux/connect-prefer-named-arguments": 2,
+    'react/forbid-prop-types': 0, // ['any', 'array', 'object']. нельзя использовать если эта функция включина
     'import/prefer-default-export': 0,
     'react/jsx-key': 2,
     'no-nested-ternary': 'off',
@@ -86,5 +88,5 @@ module.exports = {
       { forbidDefaultForRequired: false }
     ]
   },
-  plugins: ['react', 'import','jsx-a11y']
+  plugins: ['react', 'import','jsx-a11y'] //,'redux-saga','react-redux'
 };

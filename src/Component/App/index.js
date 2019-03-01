@@ -2,7 +2,7 @@ import { compose, lifecycle, withHandlers } from 'recompose'
 import { connect } from 'react-redux'
 import App from './App'
 import {
-  deleteTask, startTime, closeModal, changeName, genetateNewRows, handleChange, changeTaskPage,
+  deleteTask, startTime, closeModal, changeName, generateNewRows, handleChange, changeTaskPage,
 } from '../Actions'
 
 
@@ -15,7 +15,7 @@ export default compose(
     startTime,
     closeModal,
     changeName,
-    genetateNewRows,
+    generateNewRows,
     handleChange,
     changeTaskPage,
   }),
@@ -40,7 +40,7 @@ export default compose(
         this.props.startTime(runData, date)
       }
     },
-    componentWillUpdate(prevProps, prevState) {
+    componentWillUpdate(prevProps) {
       localStorage.setItem('state', JSON.stringify({ ...prevProps.initialState }))
     },
   }),

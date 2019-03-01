@@ -10,7 +10,7 @@ const cx = classNames.bind(styles)
 
 
 const TableTask = ({
-  rows, deleteTask, changeTaskPage, genetateNewRows,
+  rows, deleteTask, changeTaskPage, generateNewRows,
 }) => {
   let rowsLength = 1
   return (
@@ -59,7 +59,7 @@ const TableTask = ({
                   <TableCell className={cx('tableCell')}>
                     <Button
                       variant='contained'
-                      className={cx('buttonStop')}
+                      className={cx('buttonTable')}
                       onClick={() => changeTaskPage(taskPage)}
                     >
                       { ' ' }
@@ -69,7 +69,7 @@ const TableTask = ({
                   <TableCell className={cx('tableCell')}>
                     <Button
                       variant='contained'
-                      className={cx('buttonStop')}
+                      className={cx('buttonTable')}
                       onClick={() => deleteTask(row.id, rows)}
                     >
                       { ' ' }
@@ -85,7 +85,7 @@ const TableTask = ({
       <Button
         variant='contained'
         className={cx('generate')}
-        onClick={genetateNewRows}
+        onClick={generateNewRows}
       >
         GENERATE
       </Button>
@@ -98,5 +98,5 @@ TableTask.propTypes = {
   rows: PropTypes.array.isRequired,
   deleteTask: PropTypes.func.isRequired,
   changeTaskPage: PropTypes.func.isRequired,
-  genetateNewRows: PropTypes.func.isRequired,
+  generateNewRows: PropTypes.func.isRequired,
 }

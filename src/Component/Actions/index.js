@@ -52,7 +52,7 @@ export function changeName({ target }) {
   return { type: CHANGE_NAME, nameTask: target.value }
 }
 
-export function genetateNewRows() {
+export function generateNewRows() {
   return { type: GENERATE_NEWROWS }
 }
 

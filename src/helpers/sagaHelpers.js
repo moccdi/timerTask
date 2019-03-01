@@ -21,6 +21,7 @@ import {
   START_TIME__MODAL_OPEN,
   START_TIME__NEWROWS,
 } from '../Component/Actions'
+import generateRows from "./generateRows";
 
 
 // localStorage.clear();
@@ -141,31 +142,8 @@ export function ChangeNameSaga() {
 
 export function GenerateNewRowsSaga() {
   return function* () {
-    function randomNumber(min, max) {
-      let rand = min - 0.5 + Math.random() * (max - min + 1)
-      rand = Math.round(rand)
-      return rand
-    }
     try {
-      const rowsLength = randomNumber(10, 15)
-      const newRows = []
-      for (let i = 0; i < rowsLength; i++) {
-        const minutes = randomNumber(0, 59)
-        const hours = randomNumber(0, 23)
-
-        const timeEnd = new Date(70, 0, 0, hours, minutes)
-        const timeSpendMinutes = randomNumber(1, 90)
-        const timeSpend = new Date((timeSpendMinutes * 60000) - 10800000)
-        const timeStart = new Date(timeEnd - (timeSpendMinutes * 60000))
-        const oneRow = {
-          id: i,
-          task: `Task ${i + 1}`,
-          timeStart,
-          timeEnd,
-          timeSpend,
-        }
-        newRows.push(oneRow)
-      }
+     const newRows = generateRows(10, 15, 1,30)
       yield put({
         type: GENERATE_NEWROWS__SUCCESS,
         date: new Date(70, 0),

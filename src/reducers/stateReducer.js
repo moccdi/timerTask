@@ -169,7 +169,6 @@ export default function stateReducer(state = initialState, action) {
       }
     }
 
-
     default:
       return state
   }

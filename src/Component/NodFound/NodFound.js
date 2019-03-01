@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-const NodFound = ({ rows }) => (
+const NodFound = () => (
   <div>NodFound 404!!!</div>
 )
 
